@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>match</ion-title>
+    <ion-button href="/match-stats">ANIMALS</ion-button>  
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">match</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div id="container">
+    <ion-grid [fixed]="true">
+      <ion-row class="playerStats">
+        <ion-col class="t1-reves">Reves
+          <app-player-stats></app-player-stats>
+        </ion-col>
+        <ion-col class="t2-drive">Drive
+          <app-player-stats></app-player-stats>
+        </ion-col>
+      </ion-row>
+      <ion-row class="playerStats">
+        <ion-col class="t1-drive">Drive
+          <app-player-stats></app-player-stats>
+        </ion-col>
+        <ion-col class="t2-reves">Reves
+          <app-player-stats></app-player-stats>
+        </ion-col>
+      </ion-row>
+      <ion-row class="teamStats">
+        <ion-col>
+          <div>
+            <ion-button (click)="game.point(1)">
+              <ion-icon slot="icon-only" name="add-outline">
+              </ion-icon>
+            </ion-button>
+          </div>
+          <div>
+            <ion-button (click)="game.point(1)">
+              <ion-icon slot="icon-only" name="remove-outline">
+              </ion-icon>
+            </ion-button>
+          </div>
+          {{game.set1.team1.points}}
+          |
+          {{game.set2.team1.points}}
+          |
+          {{game.set3.team1.points}}
+          ||
+          {{game.getCurrentGame(1)}}
+          <div>
+
+          {{game.set1.team1.goldenPointsPlayed}}
+          </div>
+
+          <ion-checkbox [checked]="game.getCurrentSet().team1.isServing" ></ion-checkbox>
+        </ion-col>
+        <ion-col>
+          <div>
+            <ion-button (click)="game.point(2)">
+              <ion-icon slot="icon-only" name="add-outline">
+              </ion-icon>
+            </ion-button>
+          </div>
+          <div>
+            <ion-button (click)="game.point(2)">
+              <ion-icon slot="icon-only" name="remove-outline">
+              </ion-icon>
+            </ion-button>
+          </div>
+          {{game.set1.team2.points}}
+          |
+          {{game.set2.team2.points}}
+          |
+          {{game.set3.team2.points}}
+          ||
+          {{game.getCurrentGame(2)}}
+          <div>
+
+          {{game.set1.team2.goldenPointsPlayed}}
+          </div>
+
+          <ion-checkbox [checked]="game.getCurrentSet().team2.isServing" ></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
