@@ -24,9 +24,7 @@ export class MatchStats {
         this.team1Reves = new Player("Reves");
         this.team2Drive = new Player("Drive");
         this.team2Reves = new Player("Reves");
-        this.currentSet = 2;
-        this.set2.team1.points = 5;
-        this.set2.team1.scoreCurrentGame = 40;
+        this.currentSet = 1;
     }
 
     async openModal() {
