@@ -1,14 +1,399 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>matchStats</ion-title>
-    <ion-buttons slot="start" (click)="myBackButton()">Back</ion-buttons>  
+    <ion-buttons slot="start" (click)="goBack()">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Estadisticas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">matchStats</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-accordion-group value="first">
+    <ion-accordion value="first">
+      <ion-item slot="header" color="light">
+        <ion-label>Partido</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-grid [fixed]="true">
+          <ion-row>
+            <ion-col>
+              <div class="ion-padding">
+                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStats()" [columnMode]="'force'">
+                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  Puntos Ganados
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineCanvas></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  Errores No Forzados Por Pareja
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineUnforcedErrorsPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  Errores No Forzados Por Jugador
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineUnforcedErrorsPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados Por Pareja</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamUnforcedErrorsBarChart></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersUnforcedErrorsBarChart></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  Winners por Pareja
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineWinnersPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  Winners por Jugador
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineWinnersPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Pareja</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamWinnersBarChart></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersWinnersBarChart></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-accordion>
+
+
+
+    <ion-accordion *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet == -1 && matchService.game.set1.isEnded)" value="second">
+      <ion-item slot="header" color="light">
+        <ion-label>Primer Set</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-padding">
+                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(1)"
+                  [columnMode]="'force'">
+                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamUnforcedErrorsBarChartSet1></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersUnforcedErrorsBarChartSet1></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamWinnersBarChartSet1></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersWinnersBarChartSet1></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-accordion>
+
+    <ion-accordion *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet == -1 && matchService.game.set2.isEnded)"value="third">
+      <ion-item slot="header" color="light">
+        <ion-label>Segundo Set</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-padding">
+                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(2)"
+                  [columnMode]="'force'">
+                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamUnforcedErrorsBarChartSet2></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersUnforcedErrorsBarChartSet2></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamWinnersBarChartSet2></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersWinnersBarChartSet2></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-accordion>
+
+    <ion-accordion *ngIf="(matchService.game.thirdSetType == 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet == -1 && matchService.game.set3.isEnded)" value="fourth">
+      <ion-item slot="header" color="light">
+        <ion-label>Tercer Set</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-padding">
+                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(3)"
+                  [columnMode]="'force'">
+                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamUnforcedErrorsBarChartSet3></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersUnforcedErrorsBarChartSet3></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamWinnersBarChartSet3></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersWinnersBarChartSet3></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-accordion>
+    <ion-accordion *ngIf="(matchService.game.thirdSetType == 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet == -1 && matchService.game.super.isEnded)" value="fifth">
+      <ion-item slot="header" color="light">
+        <ion-label>Super Tie-Break</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-padding">
+                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(4)"
+                  [columnMode]="'force'">
+                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
+                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamUnforcedErrorsBarChartSuper></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores No Forzados por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersUnforcedErrorsBarChartSuper></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Equipo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #teamWinnersBarChartSuper></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #playersWinnersBarChartSuper></canvas>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-accordion>
+
+  </ion-accordion-group>
 </ion-content>

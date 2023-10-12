@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Como va a ser el 3 set?</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Elegir</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-radio-group (ionChange)="checkValue($event)"value="3">
+    <ion-radio value="3">Tercer Set</ion-radio><br />
+    <ion-radio value="4" checked="true">Super Tie-Break a 11</ion-radio><br />
+  </ion-radio-group>
+</ion-content>

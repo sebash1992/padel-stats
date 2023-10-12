@@ -6,9 +6,12 @@ export class MatchSet {
     team2: Team;
     lastWin:number=1;
     pointsPlayed:number=1;
-    public constructor() {
+    isEnded:boolean=false;
+    isSuper:boolean;
+    public constructor(isSuper:boolean = false) {
         this.team1 = new Team(true);
         this.team2 = new Team();
+        this.isSuper = isSuper;
 
     }
     private changeService(){
@@ -16,6 +19,7 @@ export class MatchSet {
         this.team2.isServing = !this.team2.isServing;
     }
     public pointTeam1() {
+        debugger;
         this.pointsPlayed++;
         if (this.team1.points == 6 && this.team2.points == 6) {
             this.team1.scoreCurrentGame++;
@@ -25,7 +29,7 @@ export class MatchSet {
             if ((this.team1.scoreCurrentGame == 7 && this.team2.scoreCurrentGame < 5) || (this.team1.scoreCurrentGame > 7 && this.team1.scoreCurrentGame - this.team2.scoreCurrentGame == 2)) {
                 this.team1.points++;
             }
-        } else {
+        } else if(!this.isSuper) {
             switch (this.team1.scoreCurrentGame) {
                 case 0:
                     this.calculateConsecutiveWin(1);
@@ -60,6 +64,11 @@ export class MatchSet {
                     }
                     break;
             }
+        }else{
+            this.team1.points++;
+            if((this.team2.points + this.team1.pointsWinned)%2 != 0){
+                this.changeService();
+            }
         }
     }
 
@@ -73,7 +82,7 @@ export class MatchSet {
             if ((this.team2.scoreCurrentGame == 7 && this.team1.scoreCurrentGame < 5) || (this.team2.scoreCurrentGame > 7 && this.team2.scoreCurrentGame - this.team1.scoreCurrentGame == 2)) {
                 this.team2.points++;
             }
-        } else {
+        } else if(!this.isSuper){
             switch (this.team2.scoreCurrentGame) {
                 case 0:
                     this.calculateConsecutiveWin(2);
@@ -108,18 +117,49 @@ export class MatchSet {
                     }
                     break;
             }
+        }else{
+            this.team2.points++;
+            if((this.team2.points + this.team1.points)%2 != 0){
+                this.changeService();
+            }
         }
     }
 
     public isSetEnded(): boolean {
-        if ((this.team1.points == 6 && this.team2.points < 5) || (this.team2.points == 6 && this.team1.points < 5)) {
-            return true
-        }
-        if ((this.team1.points == 7) || (this.team2.points == 7)) {
-            return true
+        if(!this.isSuper){
+            if ((this.team1.points == 6 && this.team2.points < 5) || (this.team2.points == 6 && this.team1.points < 5)) {
+                return true
+            }
+            if ((this.team1.points == 7) || (this.team2.points == 7)) {
+                return true
+            }
+        }else{
+            debugger;
+            if ((this.team2.points == 11 && this.team1.points < 10) || (this.team2.points > 11 && this.team2.points - this.team1.points == 2)) {
+                return true;
+            }
+            if ((this.team1.points == 11 && this.team2.points < 10) || (this.team1.points > 11 && this.team1.points - this.team2.points == 2)) {
+                return true;
+            }
         }
         return false;
 
+    }
+
+    public getSetWinner(): number {
+        if ((this.team1.points == 6 && this.team2.points < 5)) {
+            return 1;
+        }
+        if((this.team2.points == 6 && this.team1.points < 5)){
+            return 2;
+        }
+        if( (this.team2.points == 7)){
+            return 2
+        }
+        if ((this.team1.points == 7)) {
+            return 1;
+        }
+        return 1;
     }
 
     private calculateConsecutiveWin(teamWin:number){

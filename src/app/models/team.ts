@@ -1,3 +1,6 @@
+
+import {Player} from './player'
+
 export class Team {
     breakOptions:number;
     breaksAcchived:number;

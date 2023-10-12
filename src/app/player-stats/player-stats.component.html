@@ -1,10 +1,38 @@
 <ion-grid>
   <ion-row>
     <ion-col>Winners</ion-col>
-    <ion-col><app-counter></app-counter></ion-col>
+    <ion-col>
+      <ion-button (click)="onMinusWinner()">
+        <ion-icon 
+          slot="icon-only" 
+          name="remove-outline">
+        </ion-icon>
+      </ion-button>
+      
+      {{winners}}
+      <ion-button (click)="onAddWinner()">
+        <ion-icon 
+          slot="icon-only" 
+          name="add-outline">
+        </ion-icon>
+      </ion-button>
+    </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>Errores No forzados</ion-col>
-    <ion-col><app-counter></app-counter></ion-col>
+    <ion-col><ion-button (click)="onMinusUnforcedError()">
+      <ion-icon 
+        slot="icon-only" 
+        name="remove-outline">
+      </ion-icon>
+    </ion-button>
+    
+    {{unforcedErrors}}
+    <ion-button (click)="onAddUnforcedError()">
+      <ion-icon 
+        slot="icon-only" 
+        name="add-outline">
+      </ion-icon>
+    </ion-button></ion-col>
   </ion-row>
 </ion-grid>
