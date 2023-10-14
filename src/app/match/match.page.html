@@ -16,7 +16,7 @@
         <ion-col class="align-center">Pareja 1
           <ion-checkbox (ionChange)="checkboxClick($event,1)"
             [checked]="matchService.game.getCurrentSet().team1.isServing"></ion-checkbox></ion-col>
-        <ion-col class="align-center">Pareja 2 <ion-checkbox
+        <ion-col class="align-center">Pareja 2 <ion-checkbox (ionChange)="checkboxClick($event,2)"
             [checked]="matchService.game.getCurrentSet().team2.isServing"></ion-checkbox></ion-col>
       </ion-row>
       <ion-row class="playerStats">

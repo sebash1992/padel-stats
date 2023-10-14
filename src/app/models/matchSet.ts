@@ -5,7 +5,7 @@ export class MatchSet {
     team1: Team;
     team2: Team;
     lastWin:number=1;
-    pointsPlayed:number=1;
+    pointsPlayed:number=0;
     isEnded:boolean=false;
     isSuper:boolean;
     public constructor(isSuper:boolean = false) {
@@ -19,7 +19,6 @@ export class MatchSet {
         this.team2.isServing = !this.team2.isServing;
     }
     public pointTeam1() {
-        debugger;
         this.pointsPlayed++;
         if (this.team1.points == 6 && this.team2.points == 6) {
             this.team1.scoreCurrentGame++;
@@ -66,7 +65,7 @@ export class MatchSet {
             }
         }else{
             this.team1.points++;
-            if((this.team2.points + this.team1.pointsWinned)%2 != 0){
+            if((this.team2.points + this.team1.points)%2 != 0){
                 this.changeService();
             }
         }
@@ -134,7 +133,7 @@ export class MatchSet {
                 return true
             }
         }else{
-            debugger;
+            
             if ((this.team2.points == 11 && this.team1.points < 10) || (this.team2.points > 11 && this.team2.points - this.team1.points == 2)) {
                 return true;
             }

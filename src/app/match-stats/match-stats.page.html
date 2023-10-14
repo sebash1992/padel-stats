@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start" (click)="goBack()">
-      <ion-back-button></ion-back-button>
+    <ion-buttons slot="start" (click)='goBack()'>
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
     </ion-buttons>
     <ion-title>Estadisticas</ion-title>
   </ion-toolbar>
@@ -14,15 +14,131 @@
         <ion-label>Partido</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
+        {{game.set1.pointsPlayed}}-{{game.set2.pointsPlayed}}
         <ion-grid [fixed]="true">
           <ion-row>
             <ion-col>
               <div class="ion-padding">
-                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStats()" [columnMode]="'force'">
-                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
-                </ngx-datatable>
+                <ion-grid [fixed]="true">
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                    <ion-col>
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- % Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(1)}}%
+                    </ion-col>
+                    <ion-col class="align-center">
+                      % Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(2)}}%
+                    </ion-col>
+                  </ion-row>
+                  <!-- Opciones de Break -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Opciones de Break
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Breaks Obtenidos-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreaks(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Breaks Obtenidos
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreaks(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Consecutivos Ganados-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Consecutivos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Errores No Forzados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(1,'drive')+getUnforcedErrors(1,'reves')}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores No Forzados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(2,'drive')+getUnforcedErrors(2,'reves')}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Winners -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinners(1,'drive')+getWinners(1,'reves')}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Winners
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinners(2,'drive')+getWinners(2,'reves')}}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </div>
             </ion-col>
           </ion-row>
@@ -34,6 +150,7 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineCanvas></canvas>
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -42,20 +159,23 @@
             <ion-col>
               <ion-card>
                 <ion-card-header>
-                  Errores No Forzados Por Pareja
+                  <ion-card-title>Errores No Forzados Por Pareja</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineUnforcedErrorsPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
             <ion-col>
               <ion-card>
                 <ion-card-header>
-                  Errores No Forzados Por Jugador
+                  <ion-card-title>Errores No Forzados Por Jugador</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineUnforcedErrorsPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1Drive.name}} <ion-icon name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1Reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2Drive.name}} <ion-icon name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2Reves.name}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -86,20 +206,23 @@
             <ion-col>
               <ion-card>
                 <ion-card-header>
-                  Winners por Pareja
+                  <ion-card-title>Winners Por Pareja</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineWinnersPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
             <ion-col>
               <ion-card>
                 <ion-card-header>
-                  Winners por Jugador
+                  <ion-card-title>Winners Por Jugador</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineWinnersPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1Drive.name}} <ion-icon name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1Reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2Drive.name}} <ion-icon name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2Reves.name}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -130,9 +253,11 @@
       </div>
     </ion-accordion>
 
+    <!-- Set 1 -->
 
-
-    <ion-accordion *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet == -1 && matchService.game.set1.isEnded)" value="second">
+    <ion-accordion
+      *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet == -1 && matchService.game.set1.isEnded)"
+      value="second">
       <ion-item slot="header" color="light">
         <ion-label>Primer Set</ion-label>
       </ion-item>
@@ -141,12 +266,126 @@
           <ion-row>
             <ion-col>
               <div class="ion-padding">
-                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(1)"
-                  [columnMode]="'force'">
-                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
-                </ngx-datatable>
+                <ion-grid [fixed]="true">
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                    <ion-col>
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- % Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(1,1)}}%
+                    </ion-col>
+                    <ion-col class="align-center">
+                      % Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(2,1)}}%
+                    </ion-col>
+                  </ion-row>
+                  <!-- Opciones de Break -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Opciones de Break
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Breaks Obtenidos-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreaks(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Breaks Obtenidos
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreaks(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Consecutivos Ganados-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(1,1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Consecutivos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(2,1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Errores No Forzados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(1,'drive')+getUnforcedErrors(1,'reves',1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores No Forzados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(2,'drive')+getUnforcedErrors(2,'reves',1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Winners -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinners(1,'drive')+getWinners(1,'reves',1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Winners
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinners(2,'drive')+getWinners(2,'reves',1)}}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </div>
             </ion-col>
           </ion-row>
@@ -198,22 +437,133 @@
       </div>
     </ion-accordion>
 
-    <ion-accordion *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet == -1 && matchService.game.set2.isEnded)"value="third">
+
+
+    <!-- segundo set -->
+    <ion-accordion
+      *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet == -1 && matchService.game.set2.isEnded)"
+      value="third">
       <ion-item slot="header" color="light">
         <ion-label>Segundo Set</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
-        <ion-grid>
+        <ion-grid [fixed]="true">
           <ion-row>
+            <ion-col class="align-center">
+              {{getCoupleName(1)}}
+            </ion-col>
             <ion-col>
-              <div class="ion-padding">
-                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(2)"
-                  [columnMode]="'force'">
-                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
-                </ngx-datatable>
-              </div>
+            </ion-col>
+            <ion-col class="align-center">
+              {{getCoupleName(2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Puntos Ganados -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getWinnedPoints(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Puntos Ganados
+            </ion-col>
+            <ion-col class="align-center">
+              {{getWinnedPoints(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- % Puntos Ganados -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getWinnedPointsPercentage(1,2)}}%
+            </ion-col>
+            <ion-col class="align-center">
+              % Puntos Ganados
+            </ion-col>
+            <ion-col class="align-center">
+              {{getWinnedPointsPercentage(2,2)}}%
+            </ion-col>
+          </ion-row>
+          <!-- Opciones de Break -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getBreakOptions(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Opciones de Break
+            </ion-col>
+            <ion-col class="align-center">
+              {{getBreakOptions(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Breaks Obtenidos-->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getBreaks(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Breaks Obtenidos
+            </ion-col>
+            <ion-col class="align-center">
+              {{getBreaks(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Puntos de Oro -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getGoldenPoinsPlayed(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Puntos de Oro
+            </ion-col>
+            <ion-col class="align-center">
+              {{getGoldenPoinsPlayed(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Puntos de Oro Ganados -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getGoldenPointsWinned(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Puntos de Oro Ganados
+            </ion-col>
+            <ion-col class="align-center">
+              {{getGoldenPointsWinned(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Puntos Consecutivos Ganados-->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getConsecutivePointsWinned(1,2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Puntos Consecutivos Ganados
+            </ion-col>
+            <ion-col class="align-center">
+              {{getConsecutivePointsWinned(2,2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Errores No Forzados -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getUnforcedErrors(1,'drive')+getUnforcedErrors(1,'reves',2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Errores No Forzados
+            </ion-col>
+            <ion-col class="align-center">
+              {{getUnforcedErrors(2,'drive')+getUnforcedErrors(2,'reves',2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Winners -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getWinners(1,'drive')+getWinners(1,'reves',2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Winners
+            </ion-col>
+            <ion-col class="align-center">
+              {{getWinners(2,'drive')+getWinners(2,'reves',2)}}
             </ion-col>
           </ion-row>
           <ion-row>
@@ -263,8 +613,10 @@
         </ion-grid>
       </div>
     </ion-accordion>
-
-    <ion-accordion *ngIf="(matchService.game.thirdSetType == 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet == -1 && matchService.game.set3.isEnded)" value="fourth">
+    <!-- tercer set -->
+    <ion-accordion
+      *ngIf="(matchService.game.thirdSetType == 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet == -1 && matchService.game.set3.isEnded)"
+      value="fourth">
       <ion-item slot="header" color="light">
         <ion-label>Tercer Set</ion-label>
       </ion-item>
@@ -273,12 +625,126 @@
           <ion-row>
             <ion-col>
               <div class="ion-padding">
-                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(3)"
-                  [columnMode]="'force'">
-                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
-                </ngx-datatable>
+                <ion-grid [fixed]="true">
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                    <ion-col>
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getCoupleName(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- % Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(1,3)}}%
+                    </ion-col>
+                    <ion-col class="align-center">
+                      % Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(2,3)}}%
+                    </ion-col>
+                  </ion-row>
+                  <!-- Opciones de Break -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Opciones de Break
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Breaks Obtenidos-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreaks(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Breaks Obtenidos
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreaks(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Consecutivos Ganados-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(1,3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Consecutivos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(2,3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Errores No Forzados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(1,'drive')+getUnforcedErrors(1,'reves',3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores No Forzados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(2,'drive')+getUnforcedErrors(2,'reves',3)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Winners -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinners(1,'drive')+getWinners(1,'reves',3)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Winners
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinners(2,'drive')+getWinners(2,'reves',3)}}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </div>
             </ion-col>
           </ion-row>
@@ -329,7 +795,9 @@
         </ion-grid>
       </div>
     </ion-accordion>
-    <ion-accordion *ngIf="(matchService.game.thirdSetType == 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet == -1 && matchService.game.super.isEnded)" value="fifth">
+    <ion-accordion
+      *ngIf="(matchService.game.thirdSetType == 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet == -1 && matchService.game.super.isEnded)"
+      value="fifth">
       <ion-item slot="header" color="light">
         <ion-label>Super Tie-Break</ion-label>
       </ion-item>
@@ -338,12 +806,126 @@
           <ion-row>
             <ion-col>
               <div class="ion-padding">
-                <ngx-datatable class="fullscreen" [ngClass]="tablestyle" [rows]="getMatchStatsForSet(4)"
-                  [columnMode]="'force'">
-                  <ngx-datatable-column name="Estadistica"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja1"></ngx-datatable-column>
-                  <ngx-datatable-column name="Pareja2"></ngx-datatable-column>
-                </ngx-datatable>
+                <ion-grid [fixed]="true">
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getCoupleName(1)}}
+                    </ion-col>
+                    <ion-col>
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getCoupleName(2)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPoints(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- % Puntos Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(1,4)}}%
+                    </ion-col>
+                    <ion-col class="align-center">
+                      % Puntos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnedPointsPercentage(2,4)}}%
+                    </ion-col>
+                  </ion-row>
+                  <!-- Opciones de Break -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Opciones de Break
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreakOptions(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Breaks Obtenidos-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getBreaks(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Breaks Obtenidos
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getBreaks(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPoinsPlayed(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos de Oro Ganados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos de Oro Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getGoldenPointsWinned(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Puntos Consecutivos Ganados-->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(1,4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Puntos Consecutivos Ganados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getConsecutivePointsWinned(2,4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Errores No Forzados -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(1,'drive')+getUnforcedErrors(1,'reves',4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores No Forzados
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getUnforcedErrors(2,'drive')+getUnforcedErrors(2,'reves',4)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Winners -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinners(1,'drive')+getWinners(1,'reves',4)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Winners
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinners(2,'drive')+getWinners(2,'reves',4)}}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </div>
             </ion-col>
           </ion-row>

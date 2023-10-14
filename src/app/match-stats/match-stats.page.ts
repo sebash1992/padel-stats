@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule,NavController } from '@ionic/angular';
-import { Chart, ChartConfiguration, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, BarController, BarElement } from 'chart.js'
+import { IonicModule, NavController } from '@ionic/angular';
+import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, BarController, BarElement } from 'chart.js'
 import { Router } from '@angular/router';
 import { MatchStats } from '../models/matchStats'
-import { MatchSet } from '../models/matchSet'
 import { Team } from '../models/team'
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatchServiceService } from '../match-service.service';
@@ -83,7 +82,7 @@ export class MatchStatsPage implements OnInit {
   teamWinnersBarSuper: any;
   playersWinnersBarSuper: any;
 
-  constructor(public router: Router, private location: Location, public matchService: MatchServiceService,private navController: NavController) {
+  constructor(public router: Router, private location: Location, public matchService: MatchServiceService, private navController: NavController) {
     this.game = this.matchService.game;
   }
 
@@ -101,116 +100,90 @@ export class MatchStatsPage implements OnInit {
     this.createUnforcedErroresLineChart();
     this.createWinnersLineChart();
 
-    this.createBarChartForUnforcedErrorsByTeamSet1();
-    this.createBarChartForUnforcedErrorsByPlayerSet1();
-    this.createBarChartForWinnersByPlayerSet1();
-    this.createBarChartForWinnersByTeamSet1();
+    if (this.game.currentSet == 1 || this.game.set1.isEnded) {
+      this.createBarChartForUnforcedErrorsByTeamSet1();
+      this.createBarChartForUnforcedErrorsByPlayerSet1();
+      this.createBarChartForWinnersByPlayerSet1();
+      this.createBarChartForWinnersByTeamSet1();
+    }
 
-    this.createBarChartForUnforcedErrorsByTeamSet2();
-    this.createBarChartForUnforcedErrorsByPlayerSet2();
-    this.createBarChartForWinnersByPlayerSet2();
-    this.createBarChartForWinnersByTeamSet2();
-
-    this.createBarChartForUnforcedErrorsByTeamSet3();
-    this.createBarChartForUnforcedErrorsByPlayerSet3();
-    this.createBarChartForWinnersByPlayerSet3();
-    this.createBarChartForWinnersByTeamSet3();
-
-    this.createBarChartForUnforcedErrorsByTeamSuper();
-    this.createBarChartForUnforcedErrorsByPlayerSuper();
-    this.createBarChartForWinnersByPlayerSuper();
-    this.createBarChartForWinnersByTeamSuper();
+    if (this.game.currentSet == 2 || this.game.set2.isEnded) {
+      this.createBarChartForUnforcedErrorsByTeamSet2();
+      this.createBarChartForUnforcedErrorsByPlayerSet2();
+      this.createBarChartForWinnersByPlayerSet2();
+      this.createBarChartForWinnersByTeamSet2();
+    }
+    if (this.game.currentSet == 3 || this.game.set3.isEnded) {
+      this.createBarChartForUnforcedErrorsByTeamSet3();
+      this.createBarChartForUnforcedErrorsByPlayerSet3();
+      this.createBarChartForWinnersByPlayerSet3();
+      this.createBarChartForWinnersByTeamSet3();
+    }
+    if (this.game.currentSet == 4 || this.game.super.isEnded) {
+      this.createBarChartForUnforcedErrorsByTeamSuper();
+      this.createBarChartForUnforcedErrorsByPlayerSuper();
+      this.createBarChartForWinnersByPlayerSuper();
+      this.createBarChartForWinnersByTeamSuper();
+    }
 
   }
 
   private getLabels(): string[] {
-    switch (this.game.currentSet) {
-      case (1):
-        return ["1 Set"];
-      case (2):
-        return ["1 Set", "2 Set"];
-      case (3):
-      case (4):
-      default:
-        return ["1 Set", "2 Set", "3 Set"];
+    var labels:string[]=[];
+    if (this.matchService.game.currentSet == 1 || (this.matchService.game.set1.isEnded)) {
+      labels.push('1 Set');
     }
+    if (this.matchService.game.currentSet == 2 || (this.matchService.game.set2.isEnded)) {
+      labels.push('2 Set');
+    }
+    if (this.matchService.game.currentSet == 3 || (this.matchService.game.set3.isEnded)) {
+      labels.push('3 Set');
+    }
+    if (this.matchService.game.currentSet == 4 || (this.matchService.game.super.isEnded)) {
+      labels.push('Super');
+    }
+    return labels;
+  }
+
+  public getTeamLabel(team: number) {
+    if (team == 1) {
+
+      if (this.game.team1Drive.name != 'Drive' || this.game.team1Reves.name != 'Reves') {
+        return this.game.team1Drive.name + "-" + this.game.team1Reves.name
+      } else {
+        return 'Pareja 1';
+      }
+
+    } else {
+
+      if (this.game.team2Drive.name != 'Drive' || this.game.team2Reves.name != 'Reves') {
+        return this.game.team2Drive.name + "-" + this.game.team2Reves.name
+      } else {
+       return 'Pareja 2';
+      }
+    }
+  }
+
+  private getLabelsTeamsForBarChar() {
+    var labels: string[] = [];
+
+    labels.push(this.getTeamLabel(1));
+    labels.push(this.getTeamLabel(2));
+    return labels;
   }
 
   private GetLabelsPlayerForBarChar(): string[] {
     return ["P1 " + this.game.team1Drive.name, "P1 " + this.game.team1Reves.name, "P2 " + this.game.team2Drive.name, "P2 " + this.game.team2Reves.name]
   }
 
-  private GetLabelsTeamsForBarChar() {
-    return ["Pareja 1", "Pareja 2"]
-  }
-
-  private GetUnforcedErrorForTeam(set: number): number[] {
-    switch (set) {
-      case 1:
-        return [this.game.team1Drive.set1.unforcedErrors + this.game.team1Reves.set1.unforcedErrors, this.game.team2Reves.set1.unforcedErrors + this.game.team2Drive.set1.unforcedErrors]
-      case 2:
-        return [this.game.team1Drive.set2.unforcedErrors + this.game.team1Reves.set2.unforcedErrors, this.game.team2Reves.set2.unforcedErrors + this.game.team2Drive.set2.unforcedErrors]
-      case 3:
-        return [this.game.team1Drive.set3.unforcedErrors + this.game.team1Reves.set3.unforcedErrors, this.game.team2Reves.set3.unforcedErrors + this.game.team2Drive.set3.unforcedErrors]
-      case 4:
-        return [this.game.team1Drive.super.unforcedErrors + this.game.team1Reves.super.unforcedErrors, this.game.team2Reves.super.unforcedErrors + this.game.team2Drive.super.unforcedErrors]
-      default:
-        return [this.game.team1Drive.getTotalUnforcedErrors() + this.game.team1Reves.getTotalUnforcedErrors(), this.game.team2Reves.getTotalUnforcedErrors() + this.game.team2Drive.getTotalUnforcedErrors()]
-    }
-  }
-
-  private GetUnforcedErrorForPlayers(set: number): number[] {
-    switch (set) {
-      case 1:
-        return [this.game.team1Drive.set1.unforcedErrors, this.game.team1Reves.set1.unforcedErrors, this.game.team2Drive.set1.unforcedErrors, this.game.team2Reves.set1.unforcedErrors]
-      case 2:
-        return [this.game.team1Drive.set2.unforcedErrors, this.game.team1Reves.set2.unforcedErrors, this.game.team2Drive.set2.unforcedErrors, this.game.team2Reves.set2.unforcedErrors]
-      case 3:
-        return [this.game.team1Drive.set3.unforcedErrors, this.game.team1Reves.set3.unforcedErrors, this.game.team2Drive.set3.unforcedErrors, this.game.team2Reves.set3.unforcedErrors]
-      case 4:
-        return [this.game.team1Drive.super.unforcedErrors, this.game.team1Reves.super.unforcedErrors, this.game.team2Drive.super.unforcedErrors, this.game.team2Reves.super.unforcedErrors]
-      default:
-        return [this.game.team1Drive.getTotalUnforcedErrors(), this.game.team1Reves.getTotalUnforcedErrors(), this.game.team2Drive.getTotalUnforcedErrors(), this.game.team2Reves.getTotalUnforcedErrors()]
-    }
-  }
-
-  private GetWinnerForTeam(set: number): number[] {
-    switch (set) {
-      case 1:
-        return [this.game.team1Drive.set1.winners + this.game.team1Reves.set1.winners, this.game.team2Reves.set1.winners + this.game.team2Drive.set1.winners]
-      case 2:
-        return [this.game.team1Drive.set2.winners + this.game.team1Reves.set2.winners, this.game.team2Reves.set2.winners + this.game.team2Drive.set2.winners]
-      case 3:
-        return [this.game.team1Drive.set3.winners + this.game.team1Reves.set3.winners, this.game.team2Reves.set3.winners + this.game.team2Drive.set3.winners]
-      case 4:
-        return [this.game.team1Drive.super.winners + this.game.team1Reves.super.winners, this.game.team2Reves.super.winners + this.game.team2Drive.super.winners]
-      default:
-        return [this.game.team1Drive.getTotalWinners() + this.game.team1Reves.getTotalWinners(), this.game.team2Reves.getTotalWinners() + this.game.team2Drive.getTotalWinners()]
-    }
-  }
-
-  private GetWinnersPlayers(set: number): number[] {
-    switch (set) {
-      case 1:
-        return [this.game.team1Drive.set1.winners, this.game.team1Reves.set1.winners, this.game.team2Drive.set1.winners, this.game.team2Reves.set1.winners]
-      case 2:
-        return [this.game.team1Drive.set2.winners, this.game.team1Reves.set2.winners, this.game.team2Drive.set2.winners, this.game.team2Reves.set2.winners]
-      case 3:
-        return [this.game.team1Drive.set3.winners, this.game.team1Reves.set3.winners, this.game.team2Drive.set3.winners, this.game.team2Reves.set3.winners]
-      case 4:
-        return [this.game.team1Drive.super.winners, this.game.team1Reves.super.winners, this.game.team2Drive.super.winners, this.game.team2Reves.super.winners]
-      default:
-        return [this.game.team1Drive.getTotalWinners(), this.game.team1Reves.getTotalWinners(), this.game.team2Drive.getTotalWinners(), this.game.team2Reves.getTotalWinners()]
-    }
-  }
   createBarChartForUnforcedErrorsByTeam() {
     this.teamUnforcedErrorsBar = new Chart(this.teamUnforcedErrorsBarChart.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetUnforcedErrorForTeam(-1),
+          data: [this.getUnforcedErrors(1, 'drive') + this.getUnforcedErrors(1, 'reves'), this.getUnforcedErrors(2, 'drive') + this.getUnforcedErrors(2, 'reves')],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -218,11 +191,11 @@ export class MatchStatsPage implements OnInit {
       }
     });
   }
-  private getColors():string[]{
-    return ['#00B1FF','#00CEEF','#00E5BA','#8CF387'];
+  private getColors(): string[] {
+    return ['#00B1FF', '#00CEEF', '#00E5BA', '#8CF387'];
   }
-  private get2Colors():string[]{
-    return ['#00B1FF','#00E5BA'];
+  private get2Colors(): string[] {
+    return ['#00B1FF', '#00E5BA'];
   }
   createBarChartForUnforcedErrorsByPlayer() {
     this.playersUnforcedErrorsBar = new Chart(this.playersUnforcedErrorsBarChart.nativeElement, {
@@ -231,7 +204,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetUnforcedErrorForPlayers(-1),
+          data: [this.getUnforcedErrors(1, 'drive'), this.getUnforcedErrors(1, 'reves'), this.getUnforcedErrors(2, 'drive'), this.getUnforcedErrors(2, 'reves')],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -243,10 +216,10 @@ export class MatchStatsPage implements OnInit {
     this.teamWinnersBar = new Chart(this.teamWinnersBarChart.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetWinnerForTeam(-1),
+          data: [this.getWinners(1, 'drive') + this.getWinners(1, 'reves'), this.getWinners(2, 'drive') + this.getWinners(2, 'reves')],
           backgroundColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -261,7 +234,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetWinnersPlayers(-1),
+          data: [this.getWinners(1, 'drive'), this.getWinners(1, 'reves'), this.getWinners(2, 'drive'), this.getWinners(2, 'reves')],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -269,170 +242,508 @@ export class MatchStatsPage implements OnInit {
       }
     });
   }
-  public getMatchStats() {
-    var totalPoints = this.game.set1.pointsPlayed + this.game.set3.pointsPlayed + this.game.set3.pointsPlayed + this.game.super.pointsPlayed
-    return [
-      {
-        "estadistica": "Puntos Ganados",
-        "pareja1": this.game.set1.team1.pointsWinned + this.game.set3.team1.pointsWinned + this.game.set3.team1.pointsWinned + this.game.super.team1.pointsWinned,
-        "pareja2": this.game.set1.team2.pointsWinned + this.game.set3.team2.pointsWinned + this.game.set3.team2.pointsWinned + this.game.super.team2.pointsWinned
-      },
-      {
-        "estadistica": "% Puntos Ganados",
-        "pareja1": ((this.game.set1.team1.pointsWinned + this.game.set3.team1.pointsWinned + this.game.set3.team1.pointsWinned + this.game.super.team1.pointsWinned) / totalPoints) * 100,
-        "pareja2": ((this.game.set1.team2.pointsWinned + this.game.set3.team2.pointsWinned + this.game.set3.team2.pointsWinned + this.game.super.team2.pointsWinned) / totalPoints) * 100
-
-      },
-      {
-        "estadistica": "Opciones de Break",
-        "pareja1": this.game.set1.team1.breakOptions + this.game.set3.team1.breakOptions + this.game.set3.team1.breakOptions + this.game.super.team1.breakOptions,
-        "pareja2": this.game.set1.team2.breakOptions + this.game.set3.team2.breakOptions + this.game.set3.team2.breakOptions + this.game.super.team2.breakOptions
-      },
-      {
-        "estadistica": "Break points Ganados",
-        "pareja1": this.game.set1.team1.breaksAcchived + this.game.set3.team1.breaksAcchived + this.game.set3.team1.breaksAcchived + this.game.super.team1.breaksAcchived,
-        "pareja2": this.game.set1.team2.breaksAcchived + this.game.set3.team2.breaksAcchived + this.game.set3.team2.breaksAcchived + this.game.super.team2.breaksAcchived
-      },
-      {
-        "estadistica": "Puntos de Oro",
-        "pareja1": this.game.set1.team1.goldenPointsPlayed + this.game.set3.team1.goldenPointsPlayed + this.game.set3.team1.goldenPointsPlayed + this.game.super.team1.goldenPointsPlayed,
-        "pareja2": this.game.set1.team2.goldenPointsPlayed + this.game.set3.team2.goldenPointsPlayed + this.game.set3.team2.goldenPointsPlayed + this.game.super.team2.goldenPointsPlayed
-      },
-      {
-        "estadistica": "Puntos de Oro Ganados",
-        "pareja1": this.game.set1.team1.goldenPointsWinned + this.game.set3.team1.goldenPointsWinned + this.game.set3.team1.goldenPointsWinned + this.game.super.team1.goldenPointsWinned,
-        "pareja2": this.game.set1.team2.goldenPointsWinned + this.game.set3.team2.goldenPointsWinned + this.game.set3.team2.goldenPointsWinned + this.game.super.team2.goldenPointsWinned
-      },
-      {
-        "estadistica": "Puntos Consecutivos Ganados",
-        "pareja1": Math.max(this.game.set1.team1.consecutiveWins, this.game.set3.team1.consecutiveWins, this.game.set3.team1.consecutiveWins, this.game.super.team1.consecutiveWins),
-        "pareja2": Math.max(this.game.set1.team2.consecutiveWins, this.game.set3.team2.consecutiveWins, this.game.set3.team2.consecutiveWins, this.game.super.team2.consecutiveWins)
-
-      },
-      {
-        "estadistica": "Errores no forzados",
-        "pareja1": this.game.team1Drive.set1.unforcedErrors + this.game.team1Drive.set2.unforcedErrors + this.game.team1Drive.set3.unforcedErrors + this.game.team1Drive.super.unforcedErrors + this.game.team1Reves.set1.unforcedErrors + this.game.team1Reves.set2.unforcedErrors + this.game.team1Reves.set3.unforcedErrors + this.game.team1Reves.super.unforcedErrors,
-        "pareja2": this.game.team2Drive.set1.unforcedErrors + this.game.team2Drive.set2.unforcedErrors + this.game.team2Drive.set3.unforcedErrors + this.game.team2Drive.super.unforcedErrors + this.game.team2Reves.set1.unforcedErrors + this.game.team2Reves.set2.unforcedErrors + this.game.team2Reves.set3.unforcedErrors + this.game.team2Reves.super.unforcedErrors
-
-      },
-      {
-        "estadistica": "winners",
-        "pareja1": this.game.team1Drive.set1.winners + this.game.team1Drive.set2.winners + this.game.team1Drive.set3.winners + this.game.team1Drive.super.winners + this.game.team1Reves.set1.winners + this.game.team1Reves.set2.winners + this.game.team1Reves.set3.winners + this.game.team1Reves.super.winners,
-        "pareja2": this.game.team2Drive.set1.winners + this.game.team2Drive.set2.winners + this.game.team2Drive.set3.winners + this.game.team2Drive.super.winners + this.game.team2Reves.set1.winners + this.game.team2Reves.set2.winners + this.game.team2Reves.set3.winners + this.game.team2Reves.super.winners
-
-      }
-    ]
-  }
-  public getMatchStatsForSet(setNumber: number) {
-    var set: MatchSet;
-    var team1DriveSet: PlayerSet;
-    var team1RevesSet: PlayerSet;
-    var team2DriveSet: PlayerSet;
-    var team2RevesSet: PlayerSet;
-    switch (setNumber) {
-      case 1:
-        set = this.game.set1;
-        team1DriveSet = this.game.team1Drive.set1;
-        team1RevesSet = this.game.team1Reves.set1;
-        team2DriveSet = this.game.team2Drive.set1;
-        team2RevesSet = this.game.team2Reves.set1;
-        break;
-      case 2:
-        set = this.game.set2;
-        team1DriveSet = this.game.team1Drive.set2;
-        team1RevesSet = this.game.team1Reves.set2;
-        team2DriveSet = this.game.team2Drive.set2;
-        team2RevesSet = this.game.team2Reves.set2;
-        break;
-      case 3:
-        set = this.game.set3;
-        team1DriveSet = this.game.team1Drive.set3;
-        team1RevesSet = this.game.team1Reves.set3;
-        team2DriveSet = this.game.team2Drive.set3;
-        team2RevesSet = this.game.team2Reves.set3;
-        break;
-      case 4:
-        set = this.game.super;
-        team1DriveSet = this.game.team1Drive.super;
-        team1RevesSet = this.game.team1Reves.super;
-        team2DriveSet = this.game.team2Drive.super;
-        team2RevesSet = this.game.team2Reves.super;
-        break;
-    }
-    return [
-      {
-        "estadistica": "Puntos Ganados",
-        "pareja1": set.team1.pointsWinned,
-        "pareja2": set.team2.pointsWinned
-      },
-      {
-        "estadistica": "% Puntos Ganados",
-        "pareja1": ((set.team1.pointsWinned) / set.pointsPlayed) * 100,
-        "pareja2": ((set.team2.pointsWinned) / set.pointsPlayed) * 100
-
-      },
-      {
-        "estadistica": "Opciones de Break",
-        "pareja1": set.team1.breakOptions,
-        "pareja2": set.team2.breakOptions
-      },
-      {
-        "estadistica": "Break points Ganados",
-        "pareja1": set.team1.breaksAcchived,
-        "pareja2": set.team2.breaksAcchived
-      },
-      {
-        "estadistica": "Puntos de Oro",
-        "pareja1": set.team1.goldenPointsPlayed,
-        "pareja2": set.team2.goldenPointsPlayed
-      },
-      {
-        "estadistica": "Puntos de Oro Ganados",
-        "pareja1": set.team1.goldenPointsWinned,
-        "pareja2": set.team2.goldenPointsWinned
-      },
-      {
-        "estadistica": "Puntos Consecutivos Ganados",
-        "pareja1": set.team1.consecutiveWins,
-        "pareja2": set.team2.consecutiveWins
-      },
-      {
-        "estadistica": "Errores no forzados",
-        "pareja1": team1DriveSet.unforcedErrors + team1RevesSet.unforcedErrors,
-        "pareja2": team2DriveSet.unforcedErrors + team2RevesSet.unforcedErrors
-      },
-      {
-        "estadistica": "Winners",
-        "pareja1": team1DriveSet.winners + team1RevesSet.winners,
-        "pareja2": team2DriveSet.winners + team2RevesSet.winners
-      }
-    ]
-  }
-  private getPointsWinned(team: number): number[] {
-    var set1Team: Team;
-    var set2Team: Team;
-    var set3Team: Team;
+  public getCoupleName(team: number) {
     if (team == 1) {
-      set1Team = this.game.set1.team1;
-      set2Team = this.game.set2.team1;
-      set3Team = this.game.set3.team1;
+      return 'Pareja 1'
     } else {
-      set1Team = this.game.set1.team2;
-      set2Team = this.game.set2.team2;
-      set3Team = this.game.set3.team2;
-
-    }
-    switch (this.game.currentSet) {
-      case (1):
-        return [set1Team.pointsWinned];
-      case (2):
-        return [set1Team.pointsWinned, set2Team.pointsWinned];
-      case (3):
-      case (4):
-      default:
-        return [set1Team.pointsWinned, set2Team.pointsWinned, set3Team.pointsWinned];
+      return 'Pareja 2'
     }
   }
+  public getBreakOptions(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return this.matchService.game.set1.team1.breakOptions + this.matchService.game.set2.team1.breakOptions + this.matchService.game.set2.team1.breakOptions + this.matchService.game.super.team1.breakOptions;
+        } else {
+          return this.matchService.game.set1.team2.breakOptions + this.matchService.game.set2.team2.breakOptions + this.matchService.game.set2.team2.breakOptions + this.matchService.game.super.team2.breakOptions;
+        }
+    }
+    return teamStats.breakOptions;
+  }
+
+  public getBreaks(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return this.matchService.game.set1.team1.breaksAcchived + this.matchService.game.set2.team1.breaksAcchived + this.matchService.game.set2.team1.breaksAcchived + this.matchService.game.super.team1.breaksAcchived;
+        } else {
+          return this.matchService.game.set1.team2.breaksAcchived + this.matchService.game.set2.team2.breaksAcchived + this.matchService.game.set2.team2.breaksAcchived + this.matchService.game.super.team2.breaksAcchived;
+        }
+    }
+    return teamStats.breaksAcchived;
+  }
+
+  public getGoldenPoinsPlayed(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return this.matchService.game.set1.team1.goldenPointsPlayed + this.matchService.game.set2.team1.goldenPointsPlayed + this.matchService.game.set2.team1.goldenPointsPlayed + this.matchService.game.super.team1.goldenPointsPlayed;
+        } else {
+          return this.matchService.game.set1.team2.goldenPointsPlayed + this.matchService.game.set2.team2.goldenPointsPlayed + this.matchService.game.set2.team2.goldenPointsPlayed + this.matchService.game.super.team2.goldenPointsPlayed;
+        }
+    }
+    return teamStats.goldenPointsPlayed;
+  }
+
+  public getGoldenPointsWinned(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return this.matchService.game.set1.team1.goldenPointsWinned + this.matchService.game.set2.team1.goldenPointsWinned + this.matchService.game.set2.team1.goldenPointsWinned + this.matchService.game.super.team1.goldenPointsWinned;
+        } else {
+          return this.matchService.game.set1.team2.goldenPointsWinned + this.matchService.game.set2.team2.goldenPointsWinned + this.matchService.game.set2.team2.goldenPointsWinned + this.matchService.game.super.team2.goldenPointsWinned;
+        }
+    }
+    return teamStats.goldenPointsWinned;
+  }
+
+  public getConsecutivePointsWinned(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return Math.max(this.matchService.game.set1.team1.consecutiveWins, this.matchService.game.set2.team1.consecutiveWins, this.matchService.game.set2.team1.goldenPointsWinned, this.matchService.game.super.team1.consecutiveWins);
+        } else {
+          return Math.max(this.matchService.game.set1.team2.consecutiveWins, this.matchService.game.set2.team2.consecutiveWins, this.matchService.game.set2.team2.goldenPointsWinned, this.matchService.game.super.team2.consecutiveWins);
+        }
+    }
+    return teamStats.consecutiveWins;
+  }
+
+  public getWinnedPoints(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        break;
+      default:
+        if (team == 1) {
+          return this.matchService.game.set1.team1.pointsWinned + this.matchService.game.set2.team1.pointsWinned + this.matchService.game.set2.team1.pointsWinned + this.matchService.game.super.team1.pointsWinned;
+        } else {
+          return this.matchService.game.set1.team2.pointsWinned + this.matchService.game.set2.team2.pointsWinned + this.matchService.game.set2.team2.pointsWinned + this.matchService.game.super.team2.pointsWinned;
+        }
+    }
+    return teamStats.pointsWinned;
+  }
+
+  public getUnforcedErrors(team: number, player: string, set: number = -1) {
+
+    var playerStats: PlayerSet;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set1;
+          else playerStats = this.matchService.game.team1Reves.set1;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set1;
+          else playerStats = this.matchService.game.team2Reves.set1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set2;
+          else playerStats = this.matchService.game.team1Reves.set2;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set2;
+          else playerStats = this.matchService.game.team2Reves.set2;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set3;
+          else playerStats = this.matchService.game.team1Reves.set3;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set3;
+          else playerStats = this.matchService.game.team2Reves.set3;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.super;
+          else playerStats = this.matchService.game.team1Reves.super;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.super;
+          else playerStats = this.matchService.game.team2Reves.super;
+        }
+        break;
+      default:
+        if (team == 1) {
+          if (player == 'drive') return this.matchService.game.team1Drive.set1.unforcedErrors + this.matchService.game.team1Drive.set2.unforcedErrors + this.matchService.game.team1Drive.set3.unforcedErrors + this.matchService.game.team1Drive.super.unforcedErrors;
+          else return this.matchService.game.team1Reves.set1.unforcedErrors + this.matchService.game.team1Reves.set2.unforcedErrors + this.matchService.game.team1Reves.set3.unforcedErrors + this.matchService.game.team1Reves.super.unforcedErrors;
+
+        } else {
+          if (player == 'drive') return this.matchService.game.team2Drive.set1.unforcedErrors + this.matchService.game.team2Drive.set2.unforcedErrors + this.matchService.game.team2Drive.set3.unforcedErrors + this.matchService.game.team2Drive.super.unforcedErrors;
+          else return this.matchService.game.team2Reves.set1.unforcedErrors + this.matchService.game.team2Reves.set2.unforcedErrors + this.matchService.game.team2Reves.set3.unforcedErrors + this.matchService.game.team2Reves.super.unforcedErrors;
+
+        }
+    }
+    return playerStats.unforcedErrors;
+  }
+
+  public getWinners(team: number, player: string, set: number = -1) {
+
+    var playerStats: PlayerSet;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set1;
+          else playerStats = this.matchService.game.team1Reves.set1;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set1;
+          else playerStats = this.matchService.game.team2Reves.set1;
+        }
+        break;
+      case (2):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set2;
+          else playerStats = this.matchService.game.team1Reves.set2;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set2;
+          else playerStats = this.matchService.game.team2Reves.set2;
+        }
+        break;
+      case (3):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.set3;
+          else playerStats = this.matchService.game.team1Reves.set3;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.set3;
+          else playerStats = this.matchService.game.team2Reves.set3;
+        }
+        break;
+      case (4):
+        if (team == 1) {
+          if (player == 'drive') playerStats = this.matchService.game.team1Drive.super;
+          else playerStats = this.matchService.game.team1Reves.super;
+
+        } else {
+          if (player == 'drive') playerStats = this.matchService.game.team2Drive.super;
+          else playerStats = this.matchService.game.team2Reves.super;
+        }
+        break;
+      default:
+        if (team == 1) {
+          if (player == 'drive') return this.matchService.game.team1Drive.set1.winners + this.matchService.game.team1Drive.set2.winners + this.matchService.game.team1Drive.set3.winners + this.matchService.game.team1Drive.super.winners;
+          else return this.matchService.game.team1Reves.set1.winners + this.matchService.game.team1Reves.set2.winners + this.matchService.game.team1Reves.set3.winners + this.matchService.game.team1Reves.super.winners;
+
+        } else {
+          if (player == 'drive') return this.matchService.game.team2Drive.set1.winners + this.matchService.game.team2Drive.set2.winners + this.matchService.game.team2Drive.set3.winners + this.matchService.game.team2Drive.super.winners;
+          else return this.matchService.game.team2Reves.set1.winners + this.matchService.game.team2Reves.set2.winners + this.matchService.game.team2Reves.set3.winners + this.matchService.game.team2Reves.super.winners;
+
+        }
+    }
+    return playerStats.winners;
+  }
+
+  public getWinnedPointsPercentage(team: number, set: number = -1) {
+
+    var teamStats: Team;
+    var pointsPlayed: number;
+    switch (set) {
+      case (1):
+        if (team == 1) {
+          teamStats = this.matchService.game.set1.team1;
+        } else {
+          teamStats = this.matchService.game.set1.team1;
+        }
+        pointsPlayed = this.matchService.game.set1.pointsPlayed;
+        break;
+      case (2):
+        if (team == 1) {
+          teamStats = this.matchService.game.set2.team1;
+        } else {
+          teamStats = this.matchService.game.set2.team1;
+        }
+        pointsPlayed = this.matchService.game.set2.pointsPlayed;
+        break;
+      case (3):
+        if (team == 1) {
+          teamStats = this.matchService.game.set3.team1;
+        } else {
+          teamStats = this.matchService.game.set3.team1;
+        }
+        pointsPlayed = this.matchService.game.set3.pointsPlayed;
+        break;
+      case (4):
+        if (team == 1) {
+          teamStats = this.matchService.game.super.team1;
+        } else {
+          teamStats = this.matchService.game.super.team1;
+        }
+        pointsPlayed = this.matchService.game.super.pointsPlayed;
+        break;
+      default:
+        var totalPoints = this.game.set1.pointsPlayed + this.game.set2.pointsPlayed + this.game.set3.pointsPlayed + this.game.super.pointsPlayed
+        if (totalPoints != 0) {
+          var winned: number;
+          if (team == 1) {
+            winned = this.matchService.game.set1.team1.pointsWinned + this.matchService.game.set2.team1.pointsWinned + this.matchService.game.set2.team1.pointsWinned + this.matchService.game.super.team1.pointsWinned;
+          } else {
+            winned = this.matchService.game.set1.team2.pointsWinned + this.matchService.game.set2.team2.pointsWinned + this.matchService.game.set2.team2.pointsWinned + this.matchService.game.super.team2.pointsWinned;
+          }
+          return ((winned / totalPoints) * 100).toFixed(0)
+        } else {
+          return 0;
+        }
+    }
+
+    if (pointsPlayed == 0) {
+      return 0;
+    }
+    return ((teamStats.pointsWinned / pointsPlayed) * 100).toFixed(0);
+  }
+
+
+
+  getPointsWinnedForLineChart(team: number) {
+
+    var pointwinned: number[] = []
+    if (team == 1) {
+      if (this.matchService.game.currentSet == 1 || (this.matchService.game.set1.isEnded)) {
+        pointwinned.push(this.game.set1.team1.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 2 || (this.matchService.game.set2.isEnded)) {
+        pointwinned.push(this.game.set2.team1.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 3 || (this.matchService.game.set3.isEnded)) {
+        pointwinned.push(this.game.set3.team1.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 4 || (this.matchService.game.super.isEnded)) {
+        pointwinned.push(this.game.super.team1.pointsWinned);
+      }
+    } else {
+      if (this.matchService.game.currentSet == 1 || (this.matchService.game.set1.isEnded)) {
+        pointwinned.push(this.game.set1.team2.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 2 || (this.matchService.game.set2.isEnded)) {
+        pointwinned.push(this.game.set2.team2.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 3 || (this.matchService.game.set3.isEnded)) {
+        pointwinned.push(this.game.set3.team2.pointsWinned);
+      }
+      if (this.matchService.game.currentSet == 4 || (this.matchService.game.super.isEnded)) {
+        pointwinned.push(this.game.super.team2.pointsWinned);
+      }
+    }
+    return pointwinned;
+  }
+  getWinnersForLineChart(team: number) {
+    var winners: number[] = []
+    if (team == 1) {
+      if (this.matchService.game.currentSet == 1 || (this.matchService.game.set1.isEnded)) {
+        winners.push(this.getWinners(1, 'drive', 1) + this.getWinners(1, 'reves', 1));
+      }
+      if (this.matchService.game.currentSet == 2 || (this.matchService.game.set2.isEnded)) {
+        winners.push(this.getWinners(1, 'drive', 2) + this.getWinners(1, 'reves', 2));
+      }
+      if (this.matchService.game.currentSet == 3 || (this.matchService.game.set3.isEnded)) {
+        winners.push(this.getWinners(1, 'drive', 3) + this.getWinners(1, 'reves', 3));
+      }
+      if (this.matchService.game.currentSet == 4 || (this.matchService.game.super.isEnded)) {
+        winners.push(this.getWinners(1, 'drive', 4) + this.getWinners(1, 'reves', 4));
+      }
+    } else {
+      if (this.matchService.game.currentSet == 1 || (this.matchService.game.set1.isEnded)) {
+        winners.push(this.getWinners(2, 'drive', 1) + this.getWinners(2, 'reves', 1));
+      }
+      if (this.matchService.game.currentSet == 2 || (this.matchService.game.set2.isEnded)) {
+        winners.push(this.getWinners(2, 'drive', 2) + this.getWinners(2, 'reves', 2));
+      }
+      if (this.matchService.game.currentSet == 3 || (this.matchService.game.set3.isEnded)) {
+        winners.push(this.getWinners(2, 'drive', 3) + this.getWinners(2, 'reves', 3));
+      }
+      if (this.matchService.game.currentSet == 4 || (this.matchService.game.super.isEnded)) {
+        winners.push(this.getWinners(2, 'drive', 4) + this.getWinners(2, 'reves', 4));
+      }
+    }
+    return winners;
+  }
+
+
+
+
   lineChartMethod() {
     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
       type: 'line',
@@ -440,48 +751,32 @@ export class MatchStatsPage implements OnInit {
         labels: this.getLabels(),
         datasets: [
           {
-            label: 'Sell per week',
+            label: this.getTeamLabel(1),
             fill: false,
             tension: 0.1,
             backgroundColor: '#00B1FF',
             borderColor: '#00B1FF',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
             pointBorderColor: '#00B1FF',
             pointBackgroundColor: '#fff',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#00B1FF',
-            pointHoverBorderColor: '#00B1FF',
-            pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: this.getPointsWinned(1),
-            spanGaps: false,
+            data: this.getPointsWinnedForLineChart(1),
           },
           {
-            label: 'Sell per week',
+            label: this.getTeamLabel(2),
             fill: false,
             tension: 0.1,
             backgroundColor: '#00E5BA',
             borderColor: '#00E5BA',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
             pointBorderColor: '#00E5BA',
             pointBackgroundColor: '#fff',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#00E5BA',
-            pointHoverBorderColor: '#00E5BA',
-            pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: this.getPointsWinned(2),
-            spanGaps: false,
+            data: this.getPointsWinnedForLineChart(2),
           }
         ]
       }
@@ -512,7 +807,7 @@ export class MatchStatsPage implements OnInit {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [this.game.team1Drive.set1.winners + this.game.team1Reves.set1.winners, this.game.team1Drive.set2.winners + this.game.team1Reves.set2.winners, this.game.team1Drive.set3.winners + this.game.team1Reves.set3.winners, this.game.team1Drive.super.winners + this.game.team1Reves.super.winners],
+            data: this.getWinnersForLineChart(1),
             spanGaps: false,
           },
           {
@@ -534,7 +829,7 @@ export class MatchStatsPage implements OnInit {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [this.game.team2Drive.set1.winners + this.game.team2Reves.set1.winners, this.game.team2Drive.set2.winners + this.game.team2Reves.set2.winners, this.game.team2Drive.set3.winners + this.game.team2Reves.set3.winners, this.game.team2Drive.super.winners + this.game.team2Reves.super.winners],
+            data: this.getWinnersForLineChart(2),
             spanGaps: false,
           }
         ]
@@ -792,13 +1087,16 @@ export class MatchStatsPage implements OnInit {
     });
   }
   createBarChartForUnforcedErrorsByTeamSet1() {
+    
+    var s = [this.getUnforcedErrors(1, 'drive', 1) + this.getUnforcedErrors(1, 'reves', 1), this.getUnforcedErrors(2, 'drive', 1) + this.getUnforcedErrors(2, 'reves', 1)];
+    var ss = this.getLabelsTeamsForBarChar();
     this.teamUnforcedErrorsBarSet1 = new Chart(this.teamUnforcedErrorsBarChartSet1.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetUnforcedErrorForTeam(1),
+          data: [this.getUnforcedErrors(1, 'drive', 1) + this.getUnforcedErrors(1, 'reves', 1), this.getUnforcedErrors(2, 'drive', 1) + this.getUnforcedErrors(2, 'reves', 1)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -813,7 +1111,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetUnforcedErrorForPlayers(1),
+          data: [this.getUnforcedErrors(1, 'drive', 1), this.getUnforcedErrors(1, 'reves', 1), this.getUnforcedErrors(2, 'drive', 1), this.getUnforcedErrors(2, 'reves', 1)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -825,10 +1123,10 @@ export class MatchStatsPage implements OnInit {
     this.teamWinnersBarSet1 = new Chart(this.teamWinnersBarChartSet1.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetWinnerForTeam(1),
+          data: [this.getWinners(1, 'drive', 1) + this.getWinners(1, 'reves', 1), this.getWinners(2, 'drive', 1) + this.getWinners(2, 'reves', 1)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -843,9 +1141,9 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetWinnersPlayers(1),
+          data: [this.getWinners(1, 'drive', 1), this.getWinners(1, 'reves', 1), this.getWinners(2, 'drive', 1), this.getWinners(2, 'reves', 1)],
           backgroundColor: this.getColors(),// array should have same number of elements as number of dataset
-          borderColor:this.getColors(),// array should have same number of elements as number of dataset
+          borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
         }]
       }
@@ -857,10 +1155,10 @@ export class MatchStatsPage implements OnInit {
     this.teamUnforcedErrorsBarSet2 = new Chart(this.teamUnforcedErrorsBarChartSet2.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetUnforcedErrorForTeam(2),
+          data: [this.getUnforcedErrors(1, 'drive', 2) + this.getUnforcedErrors(1, 'reves', 2), this.getUnforcedErrors(2, 'drive', 2) + this.getUnforcedErrors(2, 'reves', 2)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -875,7 +1173,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetUnforcedErrorForPlayers(2),
+          data: [this.getUnforcedErrors(1, 'drive', 2), this.getUnforcedErrors(1, 'reves', 2), this.getUnforcedErrors(2, 'drive', 2), this.getUnforcedErrors(2, 'reves', 2)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -887,10 +1185,10 @@ export class MatchStatsPage implements OnInit {
     this.teamWinnersBarSet2 = new Chart(this.teamWinnersBarChartSet2.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetWinnerForTeam(2),
+          data: [this.getWinners(1, 'drive', 2) + this.getWinners(1, 'reves', 2), this.getWinners(2, 'drive', 2) + this.getWinners(2, 'reves', 2)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -905,7 +1203,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetWinnersPlayers(2),
+          data: [this.getWinners(1, 'drive', 2), this.getWinners(1, 'reves', 2), this.getWinners(2, 'drive', 2), this.getWinners(2, 'reves', 2)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -919,10 +1217,10 @@ export class MatchStatsPage implements OnInit {
     this.teamUnforcedErrorsBarSet3 = new Chart(this.teamUnforcedErrorsBarChartSet3.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetUnforcedErrorForTeam(3),
+          data: [this.getUnforcedErrors(1, 'drive', 3) + this.getUnforcedErrors(1, 'reves', 3), this.getUnforcedErrors(2, 'drive', 3) + this.getUnforcedErrors(2, 'reves', 3)],
           backgroundColor: 'rgb(38, 194, 129)', // array should have same number of elements as number of dataset
           borderColor: 'rgb(38, 194, 129)',// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -937,7 +1235,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetUnforcedErrorForPlayers(3),
+          data: [this.getUnforcedErrors(1, 'drive', 3), this.getUnforcedErrors(1, 'reves', 3), this.getUnforcedErrors(2, 'drive', 3), this.getUnforcedErrors(2, 'reves', 3)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -949,10 +1247,10 @@ export class MatchStatsPage implements OnInit {
     this.teamWinnersBarSet3 = new Chart(this.teamWinnersBarChartSet3.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetWinnerForTeam(3),
+          data: [this.getWinners(1, 'drive', 3) + this.getWinners(1, 'reves', 3), this.getWinners(2, 'drive', 3) + this.getWinners(2, 'reves', 3)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -967,7 +1265,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetWinnersPlayers(3),
+          data: [this.getWinners(1, 'drive', 3), this.getWinners(1, 'reves', 3), this.getWinners(2, 'drive', 3), this.getWinners(2, 'reves', 3)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -977,14 +1275,14 @@ export class MatchStatsPage implements OnInit {
   }
 
 
-    createBarChartForUnforcedErrorsByTeamSuper() {
+  createBarChartForUnforcedErrorsByTeamSuper() {
     this.teamUnforcedErrorsBarSuper = new Chart(this.teamUnforcedErrorsBarChartSuper.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetUnforcedErrorForTeam(4),
+          data: [this.getUnforcedErrors(1, 'drive', 4) + this.getUnforcedErrors(1, 'reves', 4), this.getUnforcedErrors(2, 'drive', 4) + this.getUnforcedErrors(2, 'reves', 4)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -999,7 +1297,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetUnforcedErrorForPlayers(4),
+          data: [this.getUnforcedErrors(1, 'drive', 4), this.getUnforcedErrors(1, 'reves', 4), this.getUnforcedErrors(2, 'drive', 4), this.getUnforcedErrors(2, 'reves', 4)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -1011,10 +1309,10 @@ export class MatchStatsPage implements OnInit {
     this.teamWinnersBarSuper = new Chart(this.teamWinnersBarChartSuper.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.GetLabelsTeamsForBarChar(),
+        labels: this.getLabelsTeamsForBarChar(),
         datasets: [{
           label: 'Errores no forzados',
-          data: this.GetWinnerForTeam(4),
+          data: [this.getWinners(1, 'drive', 4) + this.getWinners(1, 'reves', 4), this.getWinners(2, 'drive', 4) + this.getWinners(2, 'reves', 4)],
           backgroundColor: this.get2Colors(), // array should have same number of elements as number of dataset
           borderColor: this.get2Colors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -1029,7 +1327,7 @@ export class MatchStatsPage implements OnInit {
         labels: this.GetLabelsPlayerForBarChar(),
         datasets: [{
           label: 'Errores no forzados por jugador',
-          data: this.GetWinnersPlayers(4),
+          data: [this.getWinners(1, 'drive', 4), this.getWinners(1, 'reves', 4), this.getWinners(2, 'drive', 4), this.getWinners(2, 'reves', 4)],
           backgroundColor: this.getColors(), // array should have same number of elements as number of dataset
           borderColor: this.getColors(),// array should have same number of elements as number of dataset
           borderWidth: 1
@@ -1037,12 +1335,10 @@ export class MatchStatsPage implements OnInit {
       }
     });
   }
-  
+
 
   goBack() {
-   // this.navController.back();
-
-    this.navController.navigateForward("match");
+    this.location.back();
   }
 
 }

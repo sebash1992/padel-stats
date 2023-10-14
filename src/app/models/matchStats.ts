@@ -153,7 +153,6 @@ export class MatchStats {
         return winnedBy1 >= 2 || winnedBy2 >= 2;
     }
     public point(team: number) {
-        debugger;
         switch (this.currentSet) {
             case 1:
                 if (team == 1) {
@@ -195,7 +194,7 @@ export class MatchStats {
                     var s = this.isMatchEnded();
                     if (!this.isMatchEnded()) {
                         this.openModal();
-                        debugger;
+                        
                         var t = this.thirdSetType;
                         if ((this.set2.team1.points == 7 && this.set2.team2.points == 6) || (this.set2.team2.points == 7 && this.set2.team1.points == 6)) {
                             if (this.set2.team1.startServingTieBreak) {
