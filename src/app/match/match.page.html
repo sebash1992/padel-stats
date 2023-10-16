@@ -45,17 +45,17 @@
       <ion-row class="teamStats">
         <ion-col>
           <div>
-            <ion-button (click)="matchService.game.point(1)">
+            <ion-button (click)="matchService.point(1)">
               <ion-icon slot="icon-only" name="add-outline">
               </ion-icon>
             </ion-button>
           </div>
-          <!-- <div>
-            <ion-button (click)="matchService.game.point(1)">
+          <div>
+            <ion-button (click)="matchService.rollBackPoint">
               <ion-icon slot="icon-only" name="remove-outline">
               </ion-icon>
             </ion-button>
-          </div> -->
+          </div>
 
         </ion-col>
         <ion-col>
@@ -82,18 +82,18 @@
         </ion-col>
         <ion-col class="align-right">
           <div>
-            <ion-button (click)="matchService.game.point(2)">
+            <ion-button (click)="matchService.point(2)">
             <!-- <ion-button (click)="matchService.game.openModal()"> -->
               <ion-icon slot="icon-only" name="add-outline">
               </ion-icon>
             </ion-button>
           </div>
-          <!-- <div>
-            <ion-button (click)="matchService.game.point(2)">
+          <div>
+            <ion-button (click)="matchService.rollBackPoint()">
               <ion-icon slot="icon-only" name="remove-outline">
               </ion-icon>
             </ion-button>
-          </div> -->
+          </div>
 
         </ion-col>
       </ion-row>

@@ -1,8 +1,7 @@
 import { Team } from './team'
 import { MatchSet } from './matchSet'
 import { Player, PlayerSet } from './player'
-import { ThirdSetModalComponent } from '../third-set-modal/third-set-modal.component'
-import { ModalController } from '@ionic/angular';
+import { ThirdSetModalComponent } from '../third-set-modal/third-set-modal.component';
 
 export class MatchStats {
     set1: MatchSet;
@@ -15,28 +14,33 @@ export class MatchStats {
     team2Drive: Player;
     team2Reves: Player;
     thirdSetType: number = 3;
-    public constructor(public modalCtrl: ModalController) {
-        this.set1 = new MatchSet();
-        this.set2 = new MatchSet();
-        this.set3 = new MatchSet();
-        this.super = new MatchSet(true);
-        this.team1Drive = new Player("Drive");
-        this.team1Reves = new Player("Reves");
-        this.team2Drive = new Player("Drive");
-        this.team2Reves = new Player("Reves");
-        this.currentSet = 1;
+
+
+    public constructor(set1:MatchSet,set2:MatchSet,set3:MatchSet,superSet:MatchSet,team1Drive:Player,team1Reves:Player,team2Drive:Player,team2Reves:Player,currentSet:number) {
+        this.set1 = set1;
+        this.set2 = set2;
+        this.set3 = set3;
+        this.super = superSet;
+        this.team1Drive = team1Drive;
+        this.team1Reves = team1Reves;
+        this.team2Drive =team2Drive;
+        this.team2Reves = team2Reves;
+        this.currentSet = currentSet
     }
 
-    async openModal() {
-        const modal = await this.modalCtrl.create({
-            component: ThirdSetModalComponent,
-        });
-        modal.present();
 
-        const { data, role } = await modal.onWillDismiss();
-        ;
-        this.thirdSetType = +data;
-        this.currentSet = +data;
+    async openModal() {
+        // const modal = await this.modalCtrl.create({
+        //     component: ThirdSetModalComponent,
+        // });
+        // modal.present();
+
+        // const { data, role } = await modal.onWillDismiss();
+        // ;
+        // this.thirdSetType = +data;
+        // this.currentSet = +data;
+        this.thirdSetType = 3;
+        this.currentSet = 3;
     }
 
 
