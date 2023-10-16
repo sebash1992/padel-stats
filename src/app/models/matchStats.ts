@@ -16,16 +16,28 @@ export class MatchStats {
     thirdSetType: number = 3;
 
 
-    public constructor(set1:MatchSet,set2:MatchSet,set3:MatchSet,superSet:MatchSet,team1Drive:Player,team1Reves:Player,team2Drive:Player,team2Reves:Player,currentSet:number) {
-        this.set1 = set1;
-        this.set2 = set2;
-        this.set3 = set3;
-        this.super = superSet;
-        this.team1Drive = team1Drive;
-        this.team1Reves = team1Reves;
-        this.team2Drive =team2Drive;
-        this.team2Reves = team2Reves;
-        this.currentSet = currentSet
+    public constructor(hasPar: boolean, set1?: MatchSet, set2?: MatchSet, set3?: MatchSet, superSet?: MatchSet, team1Drive?: Player, team1Reves?: Player, team2Drive?: Player, team2Reves?: Player, currentSet?: number) {
+        if (hasPar) {
+            this.set1 = set1;
+            this.set2 = set2;
+            this.set3 = set3;
+            this.super = superSet;
+            this.team1Drive = team1Drive;
+            this.team1Reves = team1Reves;
+            this.team2Drive = team2Drive;
+            this.team2Reves = team2Reves;
+            this.currentSet = currentSet
+        }else{
+            this.set1 = new MatchSet();
+            this.set2 = new MatchSet();
+            this.set3 = new MatchSet();
+            this.super = new MatchSet();
+            this.team1Drive = new Player('Drive');
+            this.team1Reves = new Player('Reves');
+            this.team2Drive = new Player('Drive');
+            this.team2Reves = new Player('Reves');
+            this.currentSet = 1
+        }
     }
 
 
@@ -198,7 +210,7 @@ export class MatchStats {
                     var s = this.isMatchEnded();
                     if (!this.isMatchEnded()) {
                         this.openModal();
-                        
+
                         var t = this.thirdSetType;
                         if ((this.set2.team1.points == 7 && this.set2.team2.points == 6) || (this.set2.team2.points == 7 && this.set2.team1.points == 6)) {
                             if (this.set2.team1.startServingTieBreak) {

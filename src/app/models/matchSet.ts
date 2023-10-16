@@ -7,12 +7,31 @@ export class MatchSet {
     lastWin:number=1;
     pointsPlayed:number=0;
     isEnded:boolean=false;
-    isSuper:boolean;
-    public constructor(isSuper:boolean = false) {
-        this.team1 = new Team(true);
-        this.team2 = new Team();
-        this.isSuper = isSuper;
+    isSuper:boolean= false;
+    public constructor(team1?:Team,team2?:Team, lastWin?:number,pointsPlayed?:number, isEnded?:boolean,isSuper?:boolean) {
 
+        if(team1 == undefined){
+            this.team1 = new Team(true);
+        }else{
+            this.team1 = new Team(true,team1);
+        }
+        if(team2 == undefined){
+            this.team2 = new Team();
+        }else{
+            this.team2 = new Team(true,team2);
+        }
+        if(lastWin != undefined){
+            this.lastWin = lastWin;
+        }
+        if(pointsPlayed != undefined){
+            this.pointsPlayed = pointsPlayed;
+        }
+        if(isEnded != undefined){
+            this.isEnded = isEnded;
+        }
+        if(isSuper != undefined){
+            this.isSuper = isSuper;
+        }
     }
     private changeService(){
         this.team1.isServing = !this.team1.isServing;
