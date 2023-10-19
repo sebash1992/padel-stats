@@ -1,38 +1,39 @@
 <ion-grid>
-  <ion-row>
+  <ion-row  class="ion-align-items-center">
     <ion-col>Winners</ion-col>
     <ion-col>
-      <ion-button (click)="onMinusWinner()">
+        <span (click)="onMinusWinner()"><ion-icon 
+          slot="icon-only" 
+          name="remove-outline"
+          size="large">
+        </ion-icon></span>      
+      <span class="text">{{winners}}</span>
+      <span (click)="onAddWinner()">
         <ion-icon 
           slot="icon-only" 
-          name="remove-outline">
+          name="add-outline"
+          size="large">
         </ion-icon>
-      </ion-button>
-      
-      {{winners}}
-      <ion-button (click)="onAddWinner()">
-        <ion-icon 
-          slot="icon-only" 
-          name="add-outline">
-        </ion-icon>
-      </ion-button>
+      </span>
     </ion-col>
   </ion-row>
-  <ion-row>
+  <ion-row  class="ion-align-items-center">
     <ion-col>Errores No forzados</ion-col>
-    <ion-col><ion-button (click)="onMinusUnforcedError()">
+    <ion-col><span (click)="onMinusUnforcedError()">
       <ion-icon 
         slot="icon-only" 
-        name="remove-outline">
+        name="remove-outline"
+        size="large">
       </ion-icon>
-    </ion-button>
+    </span>
     
-    {{unforcedErrors}}
-    <ion-button (click)="onAddUnforcedError()">
+    <span class="text">{{unforcedErrors}}</span>
+    <span (click)="onAddUnforcedError()">
       <ion-icon 
         slot="icon-only" 
-        name="add-outline">
+        name="add-outline"
+        size="large">
       </ion-icon>
-    </ion-button></ion-col>
+    </span></ion-col>
   </ion-row>
 </ion-grid>
