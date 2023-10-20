@@ -13,12 +13,16 @@
 <ion-split-pane when="lg"></ion-split-pane>
 
 <ion-content [fullscreen]="true">
+<<<<<<< HEAD
 
 <ion-split-pane when="xs" ></ion-split-pane>
 <ion-split-pane when="md"></ion-split-pane>
 <ion-split-pane when="lg"></ion-split-pane>
 
   <div class="xc fullheight">
+=======
+  <!-- <div class="xc fullheight">
+>>>>>>> 1e7ee95e3ab8737e6cc02672041bbf8a9fe8c6c2
     <ion-grid [fixed]="true" class="vh-80">
       <ion-row>
         <ion-col class="align-center">Pareja 1
@@ -91,7 +95,6 @@
         <ion-col class="align-right">
           <div>
             <ion-button (click)="matchService.point(2)">
-            <!-- <ion-button (click)="matchService.game.openModal()"> -->
               <ion-icon slot="icon-only" name="add-outline">
               </ion-icon>
             </ion-button>
@@ -106,5 +109,109 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+  </div> -->
+
+  <div class="container medium">
+    <div class="xc fullheight">
+      <ion-grid [fixed]="true" class="vh-80">
+        <ion-row>
+          <ion-col class="align-center"><span class="par">Pareja 1</span>
+            <ion-checkbox (ionChange)="checkboxClick($event,1)"
+              [checked]="matchService.game.getCurrentSet().team1.isServing"></ion-checkbox></ion-col>
+          <ion-col class="align-center"><span class="par">Pareja 2</span><ion-checkbox
+              (ionChange)="checkboxClick($event,2)"
+              [checked]="matchService.game.getCurrentSet().team2.isServing"></ion-checkbox></ion-col>
+        </ion-row>
+        <ion-row class="playerStats">
+          <ion-col class="border-left-2px border-right-2px border-top-2px border-bottom-2px border-right-color-black">
+            <ion-input [(ngModel)]="matchService.game.team1Reves.name" class="player-input"></ion-input>
+            <app-player-stats [team]="'team1'" [player]="'reves'"></app-player-stats>
+          </ion-col>
+          <ion-col class="border-left-2px border-right-2px border-top-2px border-bottom-2px border-left-color-black">
+            <ion-input [(ngModel)]="matchService.game.team2Drive.name" class="player-input">
+            </ion-input>
+            <app-player-stats [team]="'team2'" [player]="'drive'"></app-player-stats>
+          </ion-col>
+        </ion-row>
+        <ion-row class="playerStats">
+          <ion-col class="border-left-2px border-right-2px border-bottom-2px border-right-color-black">
+            <ion-input [(ngModel)]="matchService.game.team1Drive.name" class="player-input">
+            </ion-input>
+            <app-player-stats [team]="'team1'" [player]="'drive'"></app-player-stats>
+          </ion-col>
+          <ion-col class="border-left-2px border-right-2px border-bottom-2px border-left-color-black" >
+            <ion-input [(ngModel)]="matchService.game.team2Reves.name" class="player-input">
+            </ion-input>
+            <app-player-stats [team]="'team2'" [player]="'reves'"></app-player-stats>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+          <ion-col>
+            <div>
+              <ion-button (click)="matchService.point(1)">
+                <ion-icon slot="icon-only" name="add-outline">
+                </ion-icon>
+              </ion-button>
+            </div>
+            <div>
+              <ion-button (click)="matchService.rollBackPoint">
+                <ion-icon slot="icon-only" name="remove-outline">
+                </ion-icon>
+              </ion-button>
+            </div>
+
+          </ion-col>
+          <ion-col size="8">
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ion-col
+                  *ngIf="matchService.game.team1Drive.name=='Drive' && matchService.game.team1Reves.name=='Reves'"
+                  class="align-right">Pareja 1</ion-col>
+                <ion-col
+                  *ngIf="matchService.game.team1Drive.name!='Drive' || matchService.game.team1Reves.name!='Reves'"
+                  class="align-right">{{matchService.game.team1Drive.name}}<br>{{matchService.game.team1Reves.name}}</ion-col>
+                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set1.team1.points}}</ion-col>
+                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set2.team1.points}}</ion-col>
+                <ion-col *ngIf="matchService.game.thirdSetType == 3"
+                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.set3.team1.points}}</ion-col>
+                <ion-col *ngIf="matchService.game.thirdSetType == 4"
+                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.super.team1.points}}</ion-col>
+                <ion-col class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center background-light-blue">{{matchService.game.getCurrentGame(1)}}</ion-col>
+              </ion-row>
+              <ion-row class="ion-justify-content-center">
+                <ion-col
+                  *ngIf="matchService.game.team2Drive.name == 'Drive' && matchService.game.team2Reves.name =='Reves'"
+                  class="align-right">Pareja 2</ion-col>
+                <ion-col
+                  *ngIf="matchService.game.team2Drive.name != 'Drive' || matchService.game.team2Reves.name != 'Reves'"
+                  class="align-right">{{matchService.game.team2Drive.name}}<br>{{matchService.game.team2Reves.name}}</ion-col>
+                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set1.team2.points}}</ion-col>
+                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set2.team2.points}}</ion-col>
+                <ion-col *ngIf="matchService.game.thirdSetType == 3"
+                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.set3.team2.points}}</ion-col>
+                <ion-col *ngIf="matchService.game.thirdSetType == 4"
+                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.super.team2.points}}</ion-col>
+                <ion-col class="border-left-2px border-right-2px border-bottom-2px align-center background-light-blue">{{matchService.game.getCurrentGame(2)}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+          <ion-col class="align-right">
+            <div>
+              <ion-button (click)="matchService.point(2)">
+                <ion-icon slot="icon-only" name="add-outline">
+                </ion-icon>
+              </ion-button>
+            </div>
+            <div>
+              <ion-button (click)="matchService.rollBackPoint()">
+                <ion-icon slot="icon-only" name="remove-outline">
+                </ion-icon>
+              </ion-button>
+            </div>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
   </div>
 </ion-content>

@@ -293,6 +293,25 @@ export class MatchStats {
         return 0;
     }
 
+    public getTeamLabel(team: number) {
+        if (team == 1) {
+    
+          if (this.team1Drive.name != 'Drive' || this.team1Reves.name != 'Reves') {
+            return this.team1Drive.name + "-" + this.team1Reves.name
+          } else {
+            return 'Pareja 1';
+          }
+    
+        } else {
+    
+          if (this.team2Drive.name != 'Drive' || this.team2Reves.name != 'Reves') {
+            return this.team2Drive.name + "-" + this.team2Reves.name
+          } else {
+           return 'Pareja 2';
+          }
+        }
+      }
+
 
 
 }

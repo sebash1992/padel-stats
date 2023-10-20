@@ -1,36 +1,21 @@
-.xc {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+// .xc {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// }
 
-.fullheight {
-    height: 100%;
-}
+// .fullheight {
+//     height: 100%;
+// }
 
-.playerStats {
-    height: 30vh;
-}
+// .playerStats {
+//     height: 30vh;
+// }
 
-.teamStats {
-    height: 10vh;
-}
+// .teamStats {
+//     height: 10vh;
+// }
 
-.t1-reves {
-    border: 2px solid white;
-}
-
-.t2-reves {
-    border: 2px solid white;
-}
-
-.t1-drive {
-    border: 2px solid white;
-}
-
-.t2-drive {
-    border: 2px solid white;
-}
 
 .align-center {
     text-align: center;
@@ -44,33 +29,121 @@
     text-align: right;
 }
 
-.border-result {
-    border: 2px solid white;
+.border-left-2px{
+    border-left: solid 2px;
+}
+.border-right-2px{
+    border-right: solid 2px;
+}
+.border-top-2px{
+    border-top: solid 2px;
+}
+.border-bottom-2px{
+    border-bottom: solid 2px;
 }
 
+.border-left-1px{
+    border-left: solid 1px;
+}
+.border-right-1px{
+    border-right: solid 1px;
+}
+.border-top-1px{
+    border-top: solid 1px;
+}
+.border-bottom-1px{
+    border-bottom: solid 1px;
+}
+
+.border-left-color-black{
+    border-left-color: black;
+}
+.border-right-color-black{
+    border-right-color: black;
+}
 ion-checkbox {
     --size: 20px;
     --checkbox-background-checked: #dfff4f;
-  }
-  
-  ion-checkbox::part(container) {
-    border-radius: 10px;
-    border: 2px solid #dfff4f;
-  }
+}
 
-  ion-input.player-input {
+ion-checkbox::part(container) {
+    border-radius: 20px;
+    border: 2px solid #dfff4f;
+}
+
+ion-input.player-input {
     --background: #0089FF;
     --color: #fff;
     --placeholder-color: #ddd;
     --placeholder-opacity: 0.8;
-  
+
     --padding-bottom: 10px;
     --padding-end: 10px;
     --padding-start: 10px;
     --padding-top: 10px;
-  }
-  
-  ion-input.custom .helper-text,
-  ion-input.custom .counter {
+}
+
+.background-light-blue{
+    background-color:#0089FF ;
+}
+
+ion-input.custom .helper-text,
+ion-input.custom .counter {
     color: var(--ion-color-step-700, #373737);
-  }
+}
+
+.par{
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+
+// @media screen and (max-width: 414px) {
+
+//     div.medium {
+
+//         display: none;
+
+//     }
+//     div.small {
+
+//         display: initial;
+
+//     }
+// }
+
+// @media screen and (min-width: 414px) {
+
+//     div.medium {
+
+//         display: initial;
+
+//     }
+//     div.small {
+
+//         display: none;
+
+//     }
+// }
+
+// @media screen and (max-width: 200px) {
+
+//     div.small {
+
+//         display: none;
+
+//     }
+
+// }
+
+// @media screen and (min-width: 200px) {
+
+//     div.small {
+
+//         display: none;
+
+//     }
+
+// }
