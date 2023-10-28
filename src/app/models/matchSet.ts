@@ -10,26 +10,26 @@ export class MatchSet {
     isSuper:boolean= false;
     public constructor(team1?:Team,team2?:Team, lastWin?:number,pointsPlayed?:number, isEnded?:boolean,isSuper?:boolean) {
 
-        if(team1 == undefined){
+        if(team1 === undefined){
             this.team1 = new Team(true);
         }else{
             this.team1 = new Team(true,team1);
         }
-        if(team2 == undefined){
+        if(team2 === undefined){
             this.team2 = new Team();
         }else{
             this.team2 = new Team(true,team2);
         }
-        if(lastWin != undefined){
+        if(lastWin !== undefined){
             this.lastWin = lastWin;
         }
-        if(pointsPlayed != undefined){
+        if(pointsPlayed !== undefined){
             this.pointsPlayed = pointsPlayed;
         }
-        if(isEnded != undefined){
+        if(isEnded !== undefined){
             this.isEnded = isEnded;
         }
-        if(isSuper != undefined){
+        if(isSuper !== undefined){
             this.isSuper = isSuper;
         }
     }
@@ -39,12 +39,12 @@ export class MatchSet {
     }
     public pointTeam1() {
         this.pointsPlayed++;
-        if (this.team1.points == 6 && this.team2.points == 6) {
+        if (this.team1.points === 6 && this.team2.points === 6) {
             this.team1.scoreCurrentGame++;
-            if((this.team2.scoreCurrentGame + this.team1.scoreCurrentGame)%2 != 0){
+            if((this.team2.scoreCurrentGame + this.team1.scoreCurrentGame)%2 !== 0){
                 this.changeService();
             }
-            if ((this.team1.scoreCurrentGame == 7 && this.team2.scoreCurrentGame < 5) || (this.team1.scoreCurrentGame > 7 && this.team1.scoreCurrentGame - this.team2.scoreCurrentGame == 2)) {
+            if ((this.team1.scoreCurrentGame === 7 && this.team2.scoreCurrentGame < 5) || (this.team1.scoreCurrentGame > 7 && this.team1.scoreCurrentGame - this.team2.scoreCurrentGame === 2)) {
                 this.team1.points++;
             }
         } else if(!this.isSuper) {
@@ -72,7 +72,7 @@ export class MatchSet {
                     this.team2.scoreCurrentGame = 0;
                     this.team1.points++;
                     this.changeService();
-                    if(this.team1.points == 6 && this.team2.points ==6){
+                    if(this.team1.points === 6 && this.team2.points ===6){
                           if(this.team1.isServing){
                             this.team1.startServingTieBreak = true;
                           } else{
@@ -84,7 +84,7 @@ export class MatchSet {
             }
         }else{
             this.team1.points++;
-            if((this.team2.points + this.team1.points)%2 != 0){
+            if((this.team2.points + this.team1.points)%2 !== 0){
                 this.changeService();
             }
         }
@@ -92,12 +92,12 @@ export class MatchSet {
 
     public pointTeam2() {
         this.pointsPlayed++;
-        if (this.team2.points == 6 && this.team1.points == 6) {
+        if (this.team2.points === 6 && this.team1.points === 6) {
             this.team2.scoreCurrentGame++;
-            if((this.team1.scoreCurrentGame + this.team2.scoreCurrentGame)%2 != 0){
+            if((this.team1.scoreCurrentGame + this.team2.scoreCurrentGame)%2 !== 0){
                 this.changeService();
             }
-            if ((this.team2.scoreCurrentGame == 7 && this.team1.scoreCurrentGame < 5) || (this.team2.scoreCurrentGame > 7 && this.team2.scoreCurrentGame - this.team1.scoreCurrentGame == 2)) {
+            if ((this.team2.scoreCurrentGame === 7 && this.team1.scoreCurrentGame < 5) || (this.team2.scoreCurrentGame > 7 && this.team2.scoreCurrentGame - this.team1.scoreCurrentGame === 2)) {
                 this.team2.points++;
             }
         } else if(!this.isSuper){
@@ -126,7 +126,7 @@ export class MatchSet {
                     this.team1.scoreCurrentGame = 0;
                     this.team2.points++;
                     this.changeService();
-                    if(this.team2.points == 6 && this.team1.points ==6){
+                    if(this.team2.points === 6 && this.team1.points ===6){
                           if(this.team2.isServing){
                             this.team2.startServingTieBreak = true;
                           } else{
@@ -137,7 +137,7 @@ export class MatchSet {
             }
         }else{
             this.team2.points++;
-            if((this.team2.points + this.team1.points)%2 != 0){
+            if((this.team2.points + this.team1.points)%2 !== 0){
                 this.changeService();
             }
         }
@@ -145,18 +145,18 @@ export class MatchSet {
 
     public isSetEnded(): boolean {
         if(!this.isSuper){
-            if ((this.team1.points == 6 && this.team2.points < 5) || (this.team2.points == 6 && this.team1.points < 5)) {
+            if ((this.team1.points === 6 && this.team2.points < 5) || (this.team2.points === 6 && this.team1.points < 5)) {
                 return true
             }
-            if ((this.team1.points == 7) || (this.team2.points == 7)) {
+            if ((this.team1.points === 7) || (this.team2.points === 7)) {
                 return true
             }
         }else{
             
-            if ((this.team2.points == 11 && this.team1.points < 10) || (this.team2.points > 11 && this.team2.points - this.team1.points == 2)) {
+            if ((this.team2.points === 11 && this.team1.points < 10) || (this.team2.points > 11 && this.team2.points - this.team1.points === 2)) {
                 return true;
             }
-            if ((this.team1.points == 11 && this.team2.points < 10) || (this.team1.points > 11 && this.team1.points - this.team2.points == 2)) {
+            if ((this.team1.points === 11 && this.team2.points < 10) || (this.team1.points > 11 && this.team1.points - this.team2.points === 2)) {
                 return true;
             }
         }
@@ -165,23 +165,23 @@ export class MatchSet {
     }
 
     public getSetWinner(): number {
-        if ((this.team1.points == 6 && this.team2.points < 5)) {
+        if ((this.team1.points === 6 && this.team2.points < 5)) {
             return 1;
         }
-        if((this.team2.points == 6 && this.team1.points < 5)){
+        if((this.team2.points === 6 && this.team1.points < 5)){
             return 2;
         }
-        if( (this.team2.points == 7)){
+        if( (this.team2.points === 7)){
             return 2
         }
-        if ((this.team1.points == 7)) {
+        if ((this.team1.points === 7)) {
             return 1;
         }
         return 1;
     }
 
     private calculateConsecutiveWin(teamWin:number){
-        if(this.lastWin != teamWin){
+        if(this.lastWin !== teamWin){
             this.team1.resetConsecutiveWin();
             this.team2.resetConsecutiveWin();
             this.lastWin = teamWin;
@@ -198,22 +198,22 @@ export class MatchSet {
 
     private isBreak(teamWin:number): boolean{
         if(!this.team1.isServing){
-            if(teamWin == 1 && this.team1.scoreCurrentGame == 40) return true;
+            if(teamWin === 1 && this.team1.scoreCurrentGame === 40) return true;
         }
         if(!this.team2.isServing){
-            if(teamWin == 2 && this.team2.scoreCurrentGame == 40) return true;
+            if(teamWin === 2 && this.team2.scoreCurrentGame === 40) return true;
         }
         return false;
     }
     public calculateGoldenPoint(){
-        var isGoldenPoint = this.team2.scoreCurrentGame == 40 &&  this.team1.scoreCurrentGame == 40;
+        var isGoldenPoint = this.team2.scoreCurrentGame === 40 &&  this.team1.scoreCurrentGame === 40;
         if(isGoldenPoint){
             this.team2.goldenPointsPlayed++;
             this.team1.goldenPointsPlayed++;
         }
     }
     public isGoldenPoint(): boolean{
-        return this.team2.scoreCurrentGame == 40 &&  this.team1.scoreCurrentGame == 40;
+        return this.team2.scoreCurrentGame === 40 &&  this.team1.scoreCurrentGame === 40;
     }
 
     private calculateBreakOportunities(teamWin:number):number{

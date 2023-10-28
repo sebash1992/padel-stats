@@ -296,7 +296,7 @@ export class MatchStats {
     public getTeamLabel(team: number) {
         if (team == 1) {
     
-          if (this.team1Drive.name != 'Drive' || this.team1Reves.name != 'Reves') {
+          if (this.team1Drive.name !== 'Drive' || this.team1Reves.name !== 'Reves') {
             return this.team1Drive.name + "-" + this.team1Reves.name
           } else {
             return 'Pareja 1';
@@ -304,7 +304,7 @@ export class MatchStats {
     
         } else {
     
-          if (this.team2Drive.name != 'Drive' || this.team2Reves.name != 'Reves') {
+          if (this.team2Drive.name !== 'Drive' || this.team2Reves.name !== 'Reves') {
             return this.team2Drive.name + "-" + this.team2Reves.name
           } else {
            return 'Pareja 2';

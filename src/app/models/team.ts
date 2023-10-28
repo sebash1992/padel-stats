@@ -15,7 +15,7 @@ export class Team {
     scoreCurrentGame: number;
     startServingTieBreak: boolean;
     public constructor(isServing:boolean=false,team?:Team) {
-        if(team != undefined){
+        if(team !== undefined){
             this.breakOptions = team.breakOptions;
             this.breaksAcchived = team.breaksAcchived;
             this.goldenPointsPlayed = team.goldenPointsPlayed;
