@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)='goBack()'>
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
+    </ion-buttons>
+    <ion-title>Nuevo Partido</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)='createNewGame()'>
+        Crear
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="5">
+        Pareja 1
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-input label="Drive" [(ngModel)]="t1Drive"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-input label="Reves" [(ngModel)]="t1Reves"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+      <ion-col size="5" offset="2">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-input label="Drive" [(ngModel)]="t2Drive"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-input label="Reves" [(ngModel)]="t2Reves"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-radio-group [value]="definitionSet">
+            <ion-item>
+              <ion-radio value="3" justify="space-between">Tercer Set</ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-radio value="4" justify="space-between">Super Tiebreak</ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-col>
+      <ion-col>
+        <!-- <ion-radio-group value="oro">
+          <ion-radio slot="start" value="oro" item-left>Punto de Oro</ion-radio><br />
+          <ion-radio slot="start" value="diferencia" item-left>Diferencia</ion-radio><br />
+        </ion-radio-group> -->
+        <ion-list>
+          <ion-radio-group [value]="definitionWhenTie">
+            <ion-item>
+              <ion-radio value="oro" justify="space-between">Punto de Oro</ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-radio value="diferencia" justify="space-between">Diferencia</ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

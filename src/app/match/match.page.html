@@ -1,5 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start" (click)='goBack()'>
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
+    </ion-buttons>
     <ion-title>Partido</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)='goToStats()'>
@@ -71,7 +74,7 @@
                   class="align-right">Pareja 1</ion-col>
                 <ion-col
                   *ngIf="matchService.game.team1Drive.name!=='Drive' || matchService.game.team1Reves.name!=='Reves'"
-                  class="align-right">{{matchService.game.team1Drive.name}}<br>{{matchService.game.team1Reves.name}}</ion-col>
+                  class="align-right">{{matchService.game.team1Drive.name.toUpperCase()}}<br>{{matchService.game.team1Reves.name.toUpperCase()}}</ion-col>
                 <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set1.team1.points}}</ion-col>
                 <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set2.team1.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 3"
@@ -86,7 +89,7 @@
                   class="align-right">Pareja 2</ion-col>
                 <ion-col
                   *ngIf="matchService.game.team2Drive.name !== 'Drive' || matchService.game.team2Reves.name !== 'Reves'"
-                  class="align-right">{{matchService.game.team2Drive.name}}<br>{{matchService.game.team2Reves.name}}</ion-col>
+                  class="align-right">{{matchService.game.team2Drive.name.toUpperCase()}}<br>{{matchService.game.team2Reves.name.toUpperCase()}}</ion-col>
                 <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set1.team2.points}}</ion-col>
                 <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set2.team2.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 3"
