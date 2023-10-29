@@ -26,7 +26,7 @@
                     <ion-col>
                     </ion-col>
                     <ion-col class="align-center">
-                      {{getCoupleName(1)}}
+                      {{getCoupleName(2)}}
                     </ion-col>
                   </ion-row>
                   <!-- Puntos Ganados -->
@@ -255,7 +255,7 @@
     <!-- Set 1 -->
 
     <ion-accordion
-      *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet == -1 && matchService.game.set1.isEnded)"
+      *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet === -1 && matchService.game.set1.isEnded)"
       value="second">
       <ion-item slot="header" color="light">
         <ion-label>Primer Set</ion-label>
@@ -273,7 +273,7 @@
                     <ion-col>
                     </ion-col>
                     <ion-col class="align-center">
-                      {{getCoupleName(1)}}
+                      {{getCoupleName(2)}}
                     </ion-col>
                   </ion-row>
                   <!-- Puntos Ganados -->
@@ -440,7 +440,7 @@
 
     <!-- segundo set -->
     <ion-accordion
-      *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet == -1 && matchService.game.set2.isEnded)"
+      *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet === -1 && matchService.game.set2.isEnded)"
       value="third">
       <ion-item slot="header" color="light">
         <ion-label>Segundo Set</ion-label>
@@ -614,7 +614,7 @@
     </ion-accordion>
     <!-- tercer set -->
     <ion-accordion
-      *ngIf="(matchService.game.thirdSetType == 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet == -1 && matchService.game.set3.isEnded)"
+      *ngIf="(matchService.game.thirdSetType === 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet === -1 && matchService.game.set3.isEnded)"
       value="fourth">
       <ion-item slot="header" color="light">
         <ion-label>Tercer Set</ion-label>
@@ -795,7 +795,7 @@
       </div>
     </ion-accordion>
     <ion-accordion
-      *ngIf="(matchService.game.thirdSetType == 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet == -1 && matchService.game.super.isEnded)"
+      *ngIf="(matchService.game.thirdSetType === 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet === -1 && matchService.game.super.isEnded)"
       value="fifth">
       <ion-item slot="header" color="light">
         <ion-label>Super Tie-Break</ion-label>

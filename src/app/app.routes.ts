@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'match',
+    redirectTo: 'menu',
     pathMatch: 'full',
   },
   {
@@ -17,5 +17,13 @@ export const routes: Routes = [
   {
     path: 'match-stats',
     loadComponent: () => import('./match-stats/match-stats.page').then( m => m.MatchStatsPage)
+  },
+  {
+    path: 'menu',
+    loadComponent: () => import('./menu/menu.page').then( m => m.MenuPage)
+  },
+  {
+    path: 'new-game',
+    loadComponent: () => import('./new-game/new-game.page').then( m => m.NewGamePage)
   },
 ];
