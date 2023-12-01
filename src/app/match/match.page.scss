@@ -63,12 +63,12 @@
 }
 ion-checkbox {
     --size: 20px;
-    --checkbox-background-checked: #dfff4f;
+    --checkbox-background-checked: #FFF300;
 }
 
 ion-checkbox::part(container) {
     border-radius: 20px;
-    border: 2px solid #dfff4f;
+    border: 2px solid #FFF300;
 }
 
 ion-input.player-input {

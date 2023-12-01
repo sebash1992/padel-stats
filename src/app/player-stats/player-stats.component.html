@@ -3,6 +3,7 @@
     <ion-col>Winners</ion-col>
     <ion-col>
         <span (click)="onMinusWinner()"><ion-icon 
+          class="stat-icon"
           slot="icon-only" 
           name="remove-outline"
           size="large">
@@ -10,6 +11,7 @@
       <span class="text">{{winners}}</span>
       <span (click)="onAddWinner()">
         <ion-icon 
+          class="stat-icon"
           slot="icon-only" 
           name="add-outline"
           size="large">
@@ -21,6 +23,7 @@
     <ion-col>Errores No forzados</ion-col>
     <ion-col><span (click)="onMinusUnforcedError()">
       <ion-icon 
+        class="stat-icon"
         slot="icon-only" 
         name="remove-outline"
         size="large">
@@ -30,6 +33,7 @@
     <span class="text">{{unforcedErrors}}</span>
     <span (click)="onAddUnforcedError()">
       <ion-icon 
+        class="stat-icon"
         slot="icon-only" 
         name="add-outline"
         size="large">
