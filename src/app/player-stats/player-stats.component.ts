@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CounterComponent } from '../counter/counter.component'
 import { IonicModule } from '@ionic/angular';
-import { Player } from '../models/player'
-import { MatchStats } from '../models/matchStats'
 import { MatchServiceService } from '../match-service.service'
 
 @Component({
@@ -25,6 +23,7 @@ export class PlayerStatsComponent implements OnInit {
     this.winners++;
     switch (this.team) {
       case ("team1"):
+        this.matchService.point(1);
         switch (this.player) {
           case ("drive"):
             switch (this.matchService.game.currentSet) {
@@ -61,6 +60,7 @@ export class PlayerStatsComponent implements OnInit {
         }
         break;
         case ("team2"):
+        this.matchService.point(2);
         switch (this.player) {
           case ("drive"):
             switch (this.matchService.game.currentSet) {
@@ -179,6 +179,7 @@ export class PlayerStatsComponent implements OnInit {
     this.unforcedErrors++;
     switch (this.team) {
       case ("team1"):
+        this.matchService.point(2);
         switch (this.player) {
           case ("drive"):
             switch (this.matchService.game.currentSet) {
@@ -215,6 +216,7 @@ export class PlayerStatsComponent implements OnInit {
         }
         break;
         case ("team2"):
+        this.matchService.point(1);
         switch (this.player) {
           case ("drive"):
             switch (this.matchService.game.currentSet) {
