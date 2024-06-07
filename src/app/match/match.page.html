@@ -22,30 +22,30 @@
         <ion-row>
           <ion-col class="align-center"><span class="par">Pareja 1</span>
             <ion-checkbox (ionChange)="checkboxClick($event,1)"
-              [checked]="matchService.game.getCurrentSet().team1.isServing"></ion-checkbox></ion-col>
+              [checked]="matchService.game.team1.isTeamServing()"></ion-checkbox></ion-col>
           <ion-col class="align-center"><span class="par">Pareja 2</span><ion-checkbox
               (ionChange)="checkboxClick($event,2)"
-              [checked]="matchService.game.getCurrentSet().team2.isServing"></ion-checkbox></ion-col>
+              [checked]="matchService.game.team2.isTeamServing()"></ion-checkbox></ion-col>
         </ion-row>
         <ion-row class="playerStats">
           <ion-col class="border-left-2px border-right-2px border-top-2px border-bottom-2px border-right-color-black">
-            <ion-input [(ngModel)]="matchService.game.team1Reves.name" class="player-input"></ion-input>
+            <ion-input [(ngModel)]="matchService.game.team1.reves.name" class="player-input"></ion-input>
             <app-player-stats [team]="'team1'" [player]="'reves'"></app-player-stats>
           </ion-col>
           <ion-col class="border-left-2px border-right-2px border-top-2px border-bottom-2px border-left-color-black">
-            <ion-input [(ngModel)]="matchService.game.team2Drive.name" class="player-input">
+            <ion-input [(ngModel)]="matchService.game.team2.drive.name" class="player-input">
             </ion-input>
             <app-player-stats [team]="'team2'" [player]="'drive'"></app-player-stats>
           </ion-col>
         </ion-row>
         <ion-row class="playerStats">
           <ion-col class="border-left-2px border-right-2px border-bottom-2px border-right-color-black">
-            <ion-input [(ngModel)]="matchService.game.team1Drive.name" class="player-input">
+            <ion-input [(ngModel)]="matchService.game.team1.drive.name" class="player-input">
             </ion-input>
             <app-player-stats [team]="'team1'" [player]="'drive'"></app-player-stats>
           </ion-col>
           <ion-col class="border-left-2px border-right-2px border-bottom-2px border-left-color-black" >
-            <ion-input [(ngModel)]="matchService.game.team2Reves.name" class="player-input">
+            <ion-input [(ngModel)]="matchService.game.team2.reves.name" class="player-input">
             </ion-input>
             <app-player-stats [team]="'team2'" [player]="'reves'"></app-player-stats>
           </ion-col>
@@ -70,33 +70,25 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ion-col
-                  *ngIf="matchService.game.team1Drive.name==='Drive' && matchService.game.team1Reves.name==='Reves'"
-                  class="align-right">Pareja 1</ion-col>
-                <ion-col
-                  *ngIf="matchService.game.team1Drive.name!=='Drive' || matchService.game.team1Reves.name!=='Reves'"
-                  class="align-right">{{matchService.game.team1Drive.name.toUpperCase()}}<br>{{matchService.game.team1Reves.name.toUpperCase()}}</ion-col>
-                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set1.team1.points}}</ion-col>
-                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.set2.team1.points}}</ion-col>
+                class="align-right">{{matchService.game.getTeamLabel(1)}}</ion-col>
+                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.team1.set1.points}}</ion-col>
+                <ion-col class="border-left-2px  border-bottom-2px border-top-2px align-center">{{matchService.game.team1.set2.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 3"
-                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.set3.team1.points}}</ion-col>
+                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.team1.set3.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 4"
-                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.super.team1.points}}</ion-col>
-                <ion-col class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center background-light-blue">{{matchService.game.getCurrentGame(1)}}</ion-col>
+                  class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center">{{matchService.game.team1.super.points}}</ion-col>
+                <ion-col class="border-left-2px border-right-2px border-bottom-2px border-top-2px align-center background-light-blue">{{matchService.game.getTeamCurrentGame(1)}}</ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-center">
                 <ion-col
-                  *ngIf="matchService.game.team2Drive.name === 'Drive' && matchService.game.team2Reves.name ==='Reves'"
-                  class="align-right">Pareja 2</ion-col>
-                <ion-col
-                  *ngIf="matchService.game.team2Drive.name !== 'Drive' || matchService.game.team2Reves.name !== 'Reves'"
-                  class="align-right">{{matchService.game.team2Drive.name.toUpperCase()}}<br>{{matchService.game.team2Reves.name.toUpperCase()}}</ion-col>
-                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set1.team2.points}}</ion-col>
-                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.set2.team2.points}}</ion-col>
+                class="align-right">{{matchService.game.getTeamLabel(2)}}</ion-col>
+                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.team2.set1.points}}</ion-col>
+                <ion-col class="border-left-2px border-bottom-2px align-center">{{matchService.game.team2.set2.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 3"
-                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.set3.team2.points}}</ion-col>
+                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.team2.set3.points}}</ion-col>
                 <ion-col *ngIf="matchService.game.thirdSetType === 4"
-                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.super.team2.points}}</ion-col>
-                <ion-col class="border-left-2px border-right-2px border-bottom-2px align-center background-light-blue">{{matchService.game.getCurrentGame(2)}}</ion-col>
+                  class="border-left-2px border-right-2px border-bottom-2px align-center">{{matchService.game.team2.super.points}}</ion-col>
+                <ion-col class="border-left-2px border-right-2px border-bottom-2px align-center background-light-blue">{{matchService.game.getTeamCurrentGame(2)}}</ion-col>
               </ion-row>
             </ion-grid>
           </ion-col>
