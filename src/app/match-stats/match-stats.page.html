@@ -128,13 +128,13 @@
                   <!-- Winners -->
                   <ion-row>
                     <ion-col class="align-center">
-                      {{getWinners(1,'drive')+getWinners(1,'reves')}}
+                      {{getWinners(1,'all')}}
                     </ion-col>
                     <ion-col class="align-center">
                       Winners
                     </ion-col>
                     <ion-col class="align-center">
-                      {{getWinners(2,'drive')+getWinners(2,'reves')}}
+                      {{getWinners(2,'all')}}
                     </ion-col>
                   </ion-row>
                 </ion-grid>
@@ -149,7 +149,8 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineCanvas></canvas>
-                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon
+                    name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -162,7 +163,8 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineUnforcedErrorsPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
-                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon
+                    name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -173,8 +175,10 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineUnforcedErrorsPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
-                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1Drive.name}} <ion-icon name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1Reves.name}}
-                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2Drive.name}} <ion-icon name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2Reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1.reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2.reves.name}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -209,7 +213,8 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineWinnersPerTeam style="position: relative; height:20vh; width:40vw"></canvas>
-                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
+                  <ion-icon name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(1)}} <ion-icon
+                    name="ellipse" class="icon-color-t1"></ion-icon> {{getTeamLabel(2)}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -220,8 +225,10 @@
                 </ion-card-header>
                 <ion-card-content>
                   <canvas #lineWinnersPerPlayer style="position: relative; height:20vh; width:40vw"></canvas>
-                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1Drive.name}} <ion-icon name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1Reves.name}}
-                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2Drive.name}} <ion-icon name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2Reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1.reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2.reves.name}}
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -248,15 +255,43 @@
               </ion-card>
             </ion-col>
           </ion-row>
+          <ion-row>
+            <ion-col size-md="6" size-sm="12">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Winners 40 Abajo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineWinnersIn40PerPlayer></canvas>
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1.reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2.reves.name}}
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size-md="6" size-sm="12">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Errores no forzados 40 Abajo</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <canvas #lineUnforcedErrorIn40perPlayer></canvas>
+                  <ion-icon name="ellipse" class="icon-color-p1"></ion-icon> {{game.team1.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p2"></ion-icon> {{game.team1.reves.name}}
+                  <ion-icon name="ellipse" class="icon-color-p3"></ion-icon> {{game.team2.drive.name}} <ion-icon
+                    name="ellipse" class="icon-color-p4"></ion-icon> {{game.team2.reves.name}}
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
         </ion-grid>
       </div>
     </ion-accordion>
 
     <!-- Set 1 -->
 
-    <ion-accordion
-      *ngIf="matchService.game.currentSet >= 1 || (matchService.game.currentSet === -1 && matchService.game.set1.isEnded)"
-      value="second">
+    <ion-accordion value="second" *ngIf="matchService.game.currentSet >= 1">
       <ion-item slot="header" color="light">
         <ion-label>Primer Set</ion-label>
       </ion-item>
@@ -384,6 +419,30 @@
                       {{getWinners(2,'drive')+getWinners(2,'reves',1)}}
                     </ion-col>
                   </ion-row>
+                  <!-- Errores en 40 -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getUnforceErrorsIn40(1,'drive',1)+getUnforceErrorsIn40(1,'reves',1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores no Forzados 40 abajo
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getUnforceErrorsIn40(2,'drive',1)+getUnforceErrorsIn40(2,'reves',1)}}
+                    </ion-col>
+                  </ion-row>
+                  <!-- Winners en 40 -->
+                  <ion-row>
+                    <ion-col class="align-center">
+                      {{getWinnersIn40(1,'drive')+getWinnersIn40(1,'reves',1)}}
+                    </ion-col>
+                    <ion-col class="align-center">
+                      Errores no Forzados 40 abajo
+                    </ion-col>
+                    <ion-col class="align-center">
+                      {{getWinnersIn40(2,'drive')+getWinnersIn40(2,'reves',1)}}
+                    </ion-col>
+                  </ion-row>
                 </ion-grid>
               </div>
             </ion-col>
@@ -435,13 +494,8 @@
         </ion-grid>
       </div>
     </ion-accordion>
-
-
-
     <!-- segundo set -->
-    <ion-accordion
-      *ngIf="matchService.game.currentSet >= 2 || (matchService.game.currentSet === -1 && matchService.game.set2.isEnded)"
-      value="third">
+    <ion-accordion value="third" *ngIf="matchService.game.currentSet >= 2">
       <ion-item slot="header" color="light">
         <ion-label>Segundo Set</ion-label>
       </ion-item>
@@ -565,6 +619,30 @@
               {{getWinners(2,'drive')+getWinners(2,'reves',2)}}
             </ion-col>
           </ion-row>
+          <!-- Errores no forzados 40 abajo  -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getUnforceErrorsIn40(1,'drive',2)+getUnforceErrorsIn40(1,'reves',2)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Errores no Forzados 40 abajo
+            </ion-col>
+            <ion-col class="align-center">
+              {{getUnforceErrorsIn40(2,'drive',2)+getUnforceErrorsIn40(2,'reves',2)}}
+            </ion-col>
+          </ion-row>
+          <!-- Winners en 40 -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getWinnersIn40(1,'drive',2)+getWinnersIn40(1,'reves',2)}}
+            </ion-col>
+            <ion-col class="align-center">
+             Winners 40 abajo
+            </ion-col>
+            <ion-col class="align-center">
+              {{getWinnersIn40(2,'drive',2)+getWinnersIn40(2,'reves',2)}}
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col size-md="6" size-sm="12">
               <ion-card>
@@ -613,9 +691,8 @@
       </div>
     </ion-accordion>
     <!-- tercer set -->
-    <ion-accordion
-      *ngIf="(matchService.game.thirdSetType === 3 && matchService.game.currentSet >= 3) || (matchService.game.currentSet === -1 && matchService.game.set3.isEnded)"
-      value="fourth">
+    <ion-accordion value="fourth"
+      *ngIf="this.matchService.game.currentSet >= 3 && this.matchService.game.thirdSetType == 3">
       <ion-item slot="header" color="light">
         <ion-label>Tercer Set</ion-label>
       </ion-item>
@@ -794,9 +871,8 @@
         </ion-grid>
       </div>
     </ion-accordion>
-    <ion-accordion
-      *ngIf="(matchService.game.thirdSetType === 4 && matchService.game.currentSet >= 4) || (matchService.game.currentSet === -1 && matchService.game.super.isEnded)"
-      value="fifth">
+    <ion-accordion value="fifth"
+      *ngIf="this.matchService.game.currentSet >= 4 && this.matchService.game.thirdSetType == 4">
       <ion-item slot="header" color="light">
         <ion-label>Super Tie-Break</ion-label>
       </ion-item>
@@ -924,6 +1000,30 @@
                       {{getWinners(2,'drive')+getWinners(2,'reves',4)}}
                     </ion-col>
                   </ion-row>
+                           <!-- Errores no forzados 40 abajo  -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getUnforceErrorsIn40(1,'drive',3)+getUnforceErrorsIn40(1,'reves',3)}}
+            </ion-col>
+            <ion-col class="align-center">
+              Errores no Forzados 40 abajo
+            </ion-col>
+            <ion-col class="align-center">
+              {{getUnforceErrorsIn40(2,'drive',3)+getUnforceErrorsIn40(2,'reves',3)}}
+            </ion-col>
+          </ion-row>
+          <!-- Winners en 40 -->
+          <ion-row>
+            <ion-col class="align-center">
+              {{getWinnersIn40(1,'drive',3)+getWinnersIn40(1,'reves',3)}}
+            </ion-col>
+            <ion-col class="align-center">
+             Winners 40 abajo
+            </ion-col>
+            <ion-col class="align-center">
+              {{getWinnersIn40(2,'drive',3)+getWinnersIn40(2,'reves',3)}}
+            </ion-col>
+          </ion-row>
                 </ion-grid>
               </div>
             </ion-col>
@@ -975,6 +1075,8 @@
         </ion-grid>
       </div>
     </ion-accordion>
+
+
 
   </ion-accordion-group>
 </ion-content>

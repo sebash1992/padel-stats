@@ -27,11 +27,10 @@ export class NewGamePage implements OnInit {
   createNewGame(){
     this.matchService.initializeMatch();
     this.matchService.game.thirdSetType = +this.definitionSet;
-    if(this.t1Drive!== "")this.matchService.game.team1Drive.name = this.t1Drive;
-    if(this.t1Reves!== "")this.matchService.game.team1Reves.name = this.t1Reves;
-    if(this.t2Drive!== "")this.matchService.game.team2Drive.name = this.t2Drive;
-    if(this.t2Reves!== "")this.matchService.game.team2Reves.name = this.t2Reves;
-
+    if(this.t1Drive!== "")this.matchService.game.team1.drive.name = this.t1Drive;
+    if(this.t1Reves!== "")this.matchService.game.team1.reves.name = this.t1Reves;
+    if(this.t2Drive!== "")this.matchService.game.team2.drive.name = this.t2Drive;
+    if(this.t2Reves!== "")this.matchService.game.team2.reves.name = this.t2Reves;
     this.router.navigate(['/match'])
   }
 

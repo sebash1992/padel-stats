@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CounterComponent } from '../counter/counter.component'
 import { IonicModule } from '@ionic/angular';
-import { Player } from '../models/player'
-import { MatchStats } from '../models/matchStats'
 import { MatchServiceService } from '../match-service.service'
 
 @Component({
@@ -21,313 +19,95 @@ export class PlayerStatsComponent implements OnInit {
 
   ngOnInit() { }
 
+  onMinusWinner() {
+    debugger;
+    if (this.winners > 0) {
+      this.winners --;
+      this.matchService.rollBackPoint();
+    }
+  }
   onAddWinner() {
+    this.matchService.addHistory();
     this.winners++;
     switch (this.team) {
       case ("team1"):
         switch (this.player) {
           case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team1Drive.set1.winners++;
-                break;
-              case 2:
-                this.matchService.game.team1Drive.set2.winners++;
-                break;
-              case 3:
-                this.matchService.game.team1Drive.set3.winners++;
-                break;
-              case 4:
-                this.matchService.game.team1Drive.super.winners++;
-                break;
+            this.matchService.game.team1.drive.addWinner(this.matchService.game.currentSet);
+            if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team1.drive.addWinnerIn40(this.matchService.game.currentSet);
             }
             break;
           case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team1Reves.set1.winners++;
-                break;
-              case 2:
-                this.matchService.game.team1Reves.set2.winners++;
-                break;
-              case 3:
-                this.matchService.game.team1Reves.set3.winners++;
-                break;
-              case 4:
-                this.matchService.game.team1Reves.super.winners++;
-                break;
+            this.matchService.game.team1.reves.addWinner(this.matchService.game.currentSet);
+            if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team1.reves.addWinnerIn40(this.matchService.game.currentSet);
             }
-            break;
         }
+        this.matchService.game.point(1);
         break;
-        case ("team2"):
+      case ("team2"):
         switch (this.player) {
           case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team2Drive.set1.winners++;
-                break;
-              case 2:
-                this.matchService.game.team2Drive.set2.winners++;
-                break;
-              case 3:
-                this.matchService.game.team2Drive.set3.winners++;
-                break;
-              case 4:
-                this.matchService.game.team2Drive.super.winners++;
-                break;
+            this.matchService.game.team2.drive.addWinner(this.matchService.game.currentSet);
+            if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team2.drive.addWinnerIn40(this.matchService.game.currentSet);
             }
             break;
           case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team2Reves.set1.winners++;
-                break;
-              case 2:
-                this.matchService.game.team2Reves.set2.winners++;
-                break;
-              case 3:
-                this.matchService.game.team2Reves.set3.winners++;
-                break;
-              case 4:
-                this.matchService.game.team2Reves.super.winners++;
-                break;
+            this.matchService.game.team2.reves.addWinner(this.matchService.game.currentSet);
+            if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team2.reves.addWinnerIn40(this.matchService.game.currentSet);
             }
-            break;
         }
-
-    }
-  }
-  onMinusWinner() {
-    if(this.winners > 0) this.winners--;
-    switch (this.team) {
-      case ("team1"):
-        switch (this.player) {
-          case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team1Drive.set1.winners > 0) this.matchService.game.team1Drive.set1.winners--;
-                break;
-              case 2:
-                if(this.matchService.game.team1Drive.set2.winners > 0) this.matchService.game.team1Drive.set2.winners--;
-                break;
-              case 3:
-                if(this.matchService.game.team1Drive.set3.winners > 0) this.matchService.game.team1Drive.set3.winners--;
-                break;
-              case 4:
-                if(this.matchService.game.team1Drive.super.winners > 0) this.matchService.game.team1Drive.super.winners--;
-                break;
-            }
-            break;
-          case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team1Reves.set1.winners > 0) this.matchService.game.team1Reves.set1.winners--;
-                break;
-              case 2:
-                if(this.matchService.game.team1Reves.set2.winners > 0) this.matchService.game.team1Reves.set2.winners--;
-                break;
-              case 3:
-                if(this.matchService.game.team1Reves.set3.winners > 0) this.matchService.game.team1Reves.set3.winners--;
-                break;
-              case 4:
-                if(this.matchService.game.team1Reves.super.winners > 0) this.matchService.game.team1Reves.super.winners--;
-                break;
-            }
-            break;
-        }
+        this.matchService.game.point(2);
         break;
-        case ("team2"):
-        switch (this.player) {
-          case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team2Drive.set1.winners > 0) this.matchService.game.team2Drive.set1.winners--;
-                break;
-              case 2:
-                if(this.matchService.game.team2Drive.set2.winners > 0) this.matchService.game.team2Drive.set2.winners--;
-                break;
-              case 3:
-                if(this.matchService.game.team2Drive.set3.winners > 0) this.matchService.game.team2Drive.set3.winners--;
-                break;
-              case 4:
-                if(this.matchService.game.team2Drive.super.winners > 0) this.matchService.game.team2Drive.super.winners--;
-                break;
-            }
-            break;
-          case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team2Reves.set1.winners > 0) this.matchService.game.team2Reves.set1.winners--;
-                break;
-              case 2:
-                if(this.matchService.game.team2Reves.set2.winners > 0) this.matchService.game.team2Reves.set2.winners--;
-                break;
-              case 3:
-                if(this.matchService.game.team2Reves.set3.winners > 0) this.matchService.game.team2Reves.set3.winners--;
-                break;
-              case 4:
-                if(this.matchService.game.team2Reves.super.winners > 0) this.matchService.game.team2Reves.super.winners--;
-                break;
-            }
-            break;
-        }
-
     }
   }
   onAddUnforcedError() {
+    this.matchService.addHistory();
     this.unforcedErrors++;
     switch (this.team) {
       case ("team1"):
         switch (this.player) {
           case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team1Drive.set1.unforcedErrors++;
-                break;
-              case 2:
-                this.matchService.game.team1Drive.set2.unforcedErrors++;
-                break;
-              case 3:
-                this.matchService.game.team1Drive.set3.unforcedErrors++;
-                break;
-              case 4:
-                this.matchService.game.team1Drive.super.unforcedErrors++;
-                break;
+            this.matchService.game.team1.drive.addUnforcedError(this.matchService.game.currentSet);
+            if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team1.drive.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
             break;
           case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team1Reves.set1.unforcedErrors++;
-                break;
-              case 2:
-                this.matchService.game.team1Reves.set2.unforcedErrors++;
-                break;
-              case 3:
-                this.matchService.game.team1Reves.set3.unforcedErrors++;
-                break;
-              case 4:
-                this.matchService.game.team1Reves.super.unforcedErrors++;
-                break;
+            this.matchService.game.team1.reves.addUnforcedError(this.matchService.game.currentSet);
+            if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team1.reves.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
-            break;
         }
+        this.matchService.game.point(2);
         break;
-        case ("team2"):
+      case ("team2"):
         switch (this.player) {
           case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team2Drive.set1.unforcedErrors++;
-                break;
-              case 2:
-                this.matchService.game.team2Drive.set2.unforcedErrors++;
-                break;
-              case 3:
-                this.matchService.game.team2Drive.set3.unforcedErrors++;
-                break;
-              case 4:
-                this.matchService.game.team2Drive.super.unforcedErrors++;
-                break;
+            this.matchService.game.team2.drive.addUnforcedError(this.matchService.game.currentSet);
+            if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team2.drive.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
             break;
           case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                this.matchService.game.team2Reves.set1.unforcedErrors++;
-                break;
-              case 2:
-                this.matchService.game.team2Reves.set2.unforcedErrors++;
-                break;
-              case 3:
-                this.matchService.game.team2Reves.set3.unforcedErrors++;
-                break;
-              case 4:
-                this.matchService.game.team2Reves.super.unforcedErrors++;
-                break;
+            this.matchService.game.team2.reves.addUnforcedError(this.matchService.game.currentSet);
+            if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
+              this.matchService.game.team2.reves.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
-            break;
         }
-
+        this.matchService.game.point(1);
+        break;
     }
   }
 
   onMinusUnforcedError() {
-    if(this.unforcedErrors > 0) this.unforcedErrors--;
-    switch (this.team) {
-      case ("team1"):
-        switch (this.player) {
-          case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team1Drive.set1.unforcedErrors > 0) this.matchService.game.team1Drive.set1.unforcedErrors--;
-                break;
-              case 2:
-                if(this.matchService.game.team1Drive.set2.unforcedErrors > 0) this.matchService.game.team1Drive.set2.unforcedErrors--;
-                break;
-              case 3:
-                if(this.matchService.game.team1Drive.set3.unforcedErrors > 0) this.matchService.game.team1Drive.set3.unforcedErrors--;
-                break;
-              case 4:
-                if(this.matchService.game.team1Drive.super.unforcedErrors > 0) this.matchService.game.team1Drive.super.unforcedErrors--;
-                break;
-            }
-            break;
-          case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team1Reves.set1.unforcedErrors > 0) this.matchService.game.team1Reves.set1.unforcedErrors--;
-                break;
-              case 2:
-                if(this.matchService.game.team1Reves.set2.unforcedErrors > 0) this.matchService.game.team1Reves.set2.unforcedErrors--;
-                break;
-              case 3:
-                if(this.matchService.game.team1Reves.set3.unforcedErrors > 0) this.matchService.game.team1Reves.set3.unforcedErrors--;
-                break;
-              case 4:
-                if(this.matchService.game.team1Reves.super.unforcedErrors > 0) this.matchService.game.team1Reves.super.unforcedErrors--;
-                break;
-            }
-            break;
-        }
-        break;
-        case ("team2"):
-        switch (this.player) {
-          case ("drive"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team2Drive.set1.unforcedErrors > 0) this.matchService.game.team2Drive.set1.unforcedErrors--;
-                break;
-              case 2:
-                if(this.matchService.game.team2Drive.set2.unforcedErrors > 0) this.matchService.game.team2Drive.set2.unforcedErrors--;
-                break;
-              case 3:
-                if(this.matchService.game.team2Drive.set3.unforcedErrors > 0) this.matchService.game.team2Drive.set3.unforcedErrors--;
-                break;
-              case 4:
-                if(this.matchService.game.team2Drive.super.unforcedErrors > 0) this.matchService.game.team2Drive.super.unforcedErrors--;
-                break;
-            }
-            break;
-          case ("reves"):
-            switch (this.matchService.game.currentSet) {
-              case 1:
-                if(this.matchService.game.team2Reves.set1.unforcedErrors > 0) this.matchService.game.team2Reves.set1.unforcedErrors--;
-                break;
-              case 2:
-                if(this.matchService.game.team2Reves.set2.unforcedErrors > 0) this.matchService.game.team2Reves.set2.unforcedErrors--;
-                break;
-              case 3:
-                if(this.matchService.game.team2Reves.set3.unforcedErrors > 0) this.matchService.game.team2Reves.set3.unforcedErrors--;
-                break;
-              case 4:
-                if(this.matchService.game.team2Reves.super.unforcedErrors > 0) this.matchService.game.team2Reves.super.unforcedErrors--;
-                break;
-            }
-            break;
-        }
-
-    }
+    debugger;
+    if (this.unforcedErrors > 0){
+      this.unforcedErrors --;
+      this.matchService.rollBackPoint();
+    } 
   }
 }

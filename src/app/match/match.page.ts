@@ -27,8 +27,9 @@ export class MatchPage implements OnInit {
     this.nav.navigateForward("match-stats");
   }
   checkboxClick(e,team: number){
-    this. matchService.game.getCurrentSet().team1.isServing = ! this. matchService.game.getCurrentSet().team1.isServing;
-    this. matchService.game.getCurrentSet().team2.isServing = ! this. matchService.game.getCurrentSet().team2.isServing;
+    //TODO
+     this. matchService.game.team1.changeServe();
+     this. matchService.game.team2.changeServe();
   }
 
   goBack(){
