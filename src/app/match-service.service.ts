@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatchStats } from './models/matchStats';
 import { ModalController } from '@ionic/angular';
-import { MatchSet } from './models/matchSet';
-import { Player } from './models/player';
 import { Team } from './models/team';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,20 +10,18 @@ import { Team } from './models/team';
 export class MatchServiceService {
   public game: MatchStats;
   private history:MatchStats[]= [];
-  constructor(public modalCtrl: ModalController) { }
+
+  constructor(public modalCtrl: ModalController,private storageService: LocalStorageService) { }
 
   public initializeMatch() {
     this.game = new MatchStats(false);
   }
 
-
-
-
-
   public point(team: number) {
     const copy = structuredClone(this.game)
     this.history.push(copy);
     this.game.point(team);
+    this.saveInLocalStorage();
   }
 
   public addHistory() {
@@ -47,10 +44,13 @@ export class MatchServiceService {
       this.game.setWinner = previousPoint.setWinner;
       this.game.thirdSetType = previousPoint.thirdSetType;
 
-
-      console.log('Despues');
-      console.log(JSON.stringify(this.game));
+      this.saveInLocalStorage();
     }
+  }
+
+  public saveInLocalStorage(){
+    this.storageService.setItem(this.game.id,this.game);
+
   }
 
 }

@@ -31,15 +31,19 @@
 
 .border-left-2px{
     border-left: solid 2px;
+    border-left-color: black;
 }
 .border-right-2px{
     border-right: solid 2px;
+    border-right-color: black;
 }
 .border-top-2px{
     border-top: solid 2px;
+    border-top-color: black;
 }
 .border-bottom-2px{
     border-bottom: solid 2px;
+    border-bottom-color: black;
 }
 
 .border-left-1px{
@@ -73,7 +77,7 @@ ion-checkbox::part(container) {
 
 ion-input.player-input {
     --background: #0089FF;
-    --color: #fff;
+    --color: black;
     --placeholder-color: #ddd;
     --placeholder-opacity: 0.8;
 
@@ -83,9 +87,7 @@ ion-input.player-input {
     --padding-top: 10px;
 }
 
-.background-light-blue{
-    background-color:#0089FF ;
-}
+
 
 ion-input.custom .helper-text,
 ion-input.custom .counter {

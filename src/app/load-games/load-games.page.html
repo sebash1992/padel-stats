@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)='goBack()'>
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
+    </ion-buttons>
+    <ion-title>Partidos</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <!-- <ion-list>
+    <ion-item *ngFor="let key of getKeys(matches)">
+      <strong>{{ key }}</strong>
+    </ion-item>
+  </ion-list> -->
+  <ion-grid>
+    <ion-row *ngFor="let key of getKeys(matches)">
+      <ion-col size="12">
+        <ion-button expand="block" class="menu-button" (click)="loadGame(key)">{{ matches[key].team1.drive.name.toLowerCase()}} {{matches[key].team1.reves.name.toLowerCase()}} vs {{ matches[key].team2.drive.name.toLowerCase()}} {{matches[key].team2.reves.name.toLowerCase()}} {{matches[key].date | date:'yyyy-MM-dd'}}  </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

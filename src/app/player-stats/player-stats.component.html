@@ -1,6 +1,7 @@
 <ion-grid>
+  <ion-row  class="ion-align-items-center"> <ion-col>Winners</ion-col></ion-row>
   <ion-row  class="ion-align-items-center">
-    <ion-col>Winners</ion-col>
+    
     <ion-col>
         <span (click)="onMinusWinner()"><ion-icon 
           class="stat-icon"
@@ -19,8 +20,9 @@
       </span>
     </ion-col>
   </ion-row>
+
+  <ion-row  class="ion-align-items-center"> <ion-col>Errores No forzados</ion-col></ion-row>
   <ion-row  class="ion-align-items-center">
-    <ion-col>Errores No forzados</ion-col>
     <ion-col><span (click)="onMinusUnforcedError()">
       <ion-icon 
         class="stat-icon"

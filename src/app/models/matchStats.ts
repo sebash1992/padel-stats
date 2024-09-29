@@ -1,9 +1,10 @@
 import { Team } from './team'
-import { MatchSet } from './matchSet'
-import { Player, PlayerSet } from './player'
-import { ThirdSetModalComponent } from '../third-set-modal/third-set-modal.component';
+import { v4 as uuidv4 } from 'uuid';
 
 export class MatchStats {
+    id: string;
+    date: Date
+
     team1: Team;
     team2: Team;
     currentSet: number;
@@ -11,22 +12,22 @@ export class MatchStats {
     thirdSetType: number = 3;
 
 
-    public constructor(hasPar: boolean, set1?: MatchSet, set2?: MatchSet, set3?: MatchSet, superSet?: MatchSet, team1Drive?: Player, team1Reves?: Player, team2Drive?: Player, team2Reves?: Player, currentSet?: number) {
-        if (hasPar) {
-            // this.set1 = set1;
-            // this.set2 = set2;
-            // this.set3 = set3;
-            // this.super = superSet;
-            // this.team1Drive = team1Drive;
-            // this.team1Reves = team1Reves;
-            // this.team2Drive = team2Drive;
-            // this.team2Reves = team2Reves;
-            // this.currentSet = currentSet
-        } else {
+    public constructor(hasPar: boolean, jsonData?: MatchStats) {
+        this.id = uuidv4();
+        this.date = new Date();
+        if (!hasPar) {
             this.team1 = new Team(true);
             this.team2 = new Team(false);
             this.currentSet = 1
             this.setWinner = [-1, -1, -1, -1]
+        }else{
+            this.id = jsonData.id;
+            this.date = jsonData.date
+            this.currentSet = jsonData.currentSet;
+            this.setWinner = jsonData.setWinner;
+            this.thirdSetType = jsonData.thirdSetType;
+            this.team2 = new Team(false, jsonData.team2);
+            this.team1 = new Team(false, jsonData.team1);
         }
     }
 

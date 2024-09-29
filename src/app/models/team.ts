@@ -1,5 +1,6 @@
 
 import { Player } from './player'
+import { Type } from 'class-transformer';
 
 export class TeamSet {
 
@@ -161,7 +162,6 @@ export class TeamSet {
 
 
 export class Team {
-
     drive: Player;
     reves: Player;
     set1: TeamSet;

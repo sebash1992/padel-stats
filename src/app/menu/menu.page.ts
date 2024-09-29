@@ -18,8 +18,11 @@ export class MenuPage implements OnInit {
   ngOnInit() {
   }
 
-  navigate(){
+  newGame(){
     this.router.navigate(['/new-game'])
+  }
+  loadGames(){
+    this.router.navigate(['/load-games'])
   }
 
 }

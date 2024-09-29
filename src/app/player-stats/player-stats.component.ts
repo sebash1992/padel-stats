@@ -25,6 +25,7 @@ export class PlayerStatsComponent implements OnInit {
       this.winners --;
       this.matchService.rollBackPoint();
     }
+    this.matchService.saveInLocalStorage();
   }
   onAddWinner() {
     this.matchService.addHistory();
@@ -63,6 +64,7 @@ export class PlayerStatsComponent implements OnInit {
         this.matchService.game.point(2);
         break;
     }
+    this.matchService.saveInLocalStorage();
   }
   onAddUnforcedError() {
     this.matchService.addHistory();
@@ -101,6 +103,7 @@ export class PlayerStatsComponent implements OnInit {
         this.matchService.game.point(1);
         break;
     }
+    this.matchService.saveInLocalStorage();
   }
 
   onMinusUnforcedError() {
@@ -109,5 +112,6 @@ export class PlayerStatsComponent implements OnInit {
       this.unforcedErrors --;
       this.matchService.rollBackPoint();
     } 
+    this.matchService.saveInLocalStorage();
   }
 }

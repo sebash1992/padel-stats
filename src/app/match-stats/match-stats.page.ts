@@ -1223,7 +1223,7 @@ export class MatchStatsPage implements OnInit {
 
 
   goBack() {
-    this.router.navigate(['/match'])
+    this.location.back(); 
   }
 
 }

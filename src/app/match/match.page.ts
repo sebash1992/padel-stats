@@ -24,7 +24,7 @@ export class MatchPage implements OnInit {
   }
 
   goToStats() {
-    this.nav.navigateForward("match-stats");
+    this.router.navigate(['/match-stats']);
   }
   checkboxClick(e,team: number){
     //TODO
