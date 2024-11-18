@@ -51,7 +51,7 @@
       <ion-col>
         Definicion Set Iguales
         <ion-list>
-          <ion-radio-group [value]="definitionSet">
+          <ion-radio-group [value]="definitionSet" (ionChange)="onSetChange($event)">
             <ion-item>
               <ion-radio value="3" justify="space-between" color="light">Tercer Set</ion-radio>
             </ion-item>

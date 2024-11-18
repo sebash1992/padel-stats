@@ -86,7 +86,7 @@ export class TeamSet {
 
     public point(oponentScoreCurrentGames: number, oponentPoints: number): boolean {
         this.addConsecutiveWin();
-        if (oponentPoints === 6 && this.points === 6) {
+        if (oponentPoints === 6 && this.points === 6 && !this.isSuper) {
             this.scoreCurrentGame++;
             let difference = (this.scoreCurrentGame - oponentScoreCurrentGames);
             if (this.scoreCurrentGame >= 7 && difference >= 2) {
@@ -126,6 +126,13 @@ export class TeamSet {
             }
         } else {
             this.points++;
+            let difference = (this.points - oponentPoints);
+            debugger;
+            if (this.points >= 11 && difference >= 2) {
+                this.scoreCurrentGame = 0;
+                return true;
+
+            }
         }
         return false;
     }

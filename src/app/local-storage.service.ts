@@ -33,7 +33,7 @@ export class LocalStorageService {
 
   getItems(key: string): any {
     const value = localStorage.getItem(key);
-    debugger;
+    ;
     return value ? JSON.parse(value) : null;
   }
 

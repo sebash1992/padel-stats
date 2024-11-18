@@ -20,7 +20,7 @@ export class PlayerStatsComponent implements OnInit {
   ngOnInit() { }
 
   onMinusWinner() {
-    debugger;
+    ;
     if (this.winners > 0) {
       this.winners --;
       this.matchService.rollBackPoint();
@@ -107,7 +107,7 @@ export class PlayerStatsComponent implements OnInit {
   }
 
   onMinusUnforcedError() {
-    debugger;
+    ;
     if (this.unforcedErrors > 0){
       this.unforcedErrors --;
       this.matchService.rollBackPoint();

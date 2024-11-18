@@ -57,23 +57,31 @@ export class MatchStats {
 
     public point(team: number) {
         let finish;
+        let setBeforeChanges = this.currentSet;
+        debugger;
+        let team2CurrentGame =this.team2.scoreCurrentGame(this.currentSet);
+        let team2CurrentPoint = this.team2.pointsCurrentSet(this.currentSet);
+
+        let team1CurrentGame =this.team1.scoreCurrentGame(this.currentSet);
+        let team1CurrentPoint = this.team1.pointsCurrentSet(this.currentSet);
         if (team == 1) {
-            finish = this.team1.point(this.currentSet, this.team2.scoreCurrentGame(this.currentSet), this.team2.pointsCurrentSet(this.currentSet));
+            finish = this.team1.point(this.currentSet, team2CurrentGame, team2CurrentPoint);
             this.team2.resetConsecutiveWin();
         }
         if (team == 2) {
-            finish = this.team2.point(this.currentSet, this.team2.scoreCurrentGame(this.currentSet), this.team2.pointsCurrentSet(this.currentSet));
+            finish = this.team2.point(this.currentSet, team1CurrentGame, team1CurrentPoint);
             this.team1.resetConsecutiveWin();
 
         }
         let pointsTeam1 = this.team1.pointsCurrentSet(this.currentSet);
         let pointsTeam2 = this.team2.pointsCurrentSet(this.currentSet);
         if (finish) {
+            ;
             this.team1.changeServe();
             this.team2.changeServe();
             this.team2.resetGames(this.currentSet);
             this.team1.resetGames(this.currentSet);
-
+            debugger;
 
             if ((pointsTeam1 == 6 && pointsTeam2 < 5) || (pointsTeam1 == 7 && (pointsTeam2 == 5 || pointsTeam2 == 6))) {
                 this.setWinner[this.currentSet - 1] = 1;
@@ -85,15 +93,19 @@ export class MatchStats {
 
             }
             if ((pointsTeam2 == 6 && pointsTeam1 < 5) || (pointsTeam2 == 7 && (pointsTeam1 == 5 || pointsTeam1 == 6))) {
-                this.setWinner[this.currentSet - 1] = 1;
+                this.setWinner[this.currentSet - 1] = 2;
                 if (this.currentSet == 2) {
                     this.currentSet = this.thirdSetType;
                 } else {
                     this.currentSet++;
                 }
             }
+            if(this.currentSet == 4 && this.currentSet == setBeforeChanges){
+                this.setWinner[this.currentSet - 1] = team;
+            }
             if (this.currentSet >= 3) {
                 if (this.winner() != -1) {
+                    debugger;
                     //HAY UN GANADOR
                     this.currentSet = 5;
                 }
@@ -129,6 +141,28 @@ export class MatchStats {
             return this.team2.scoreCurrentGame(this.currentSet);
         }
         return 0;
+    }
+
+    public isServing(team: number): boolean {
+        if (team == 1) {
+            return this.team1.isServing;
+        }
+        if (team == 2) {
+            return this.team2.isServing;
+        }
+        return false;
+    }
+
+    public setService(team: number) {
+        if (team == 1) {
+            this.team1.isServing = true;
+            this.team2.isServing = false;
+        }
+        if (team == 2) {
+            this.team1.isServing = false;
+            this.team2.isServing = true;
+        }
+        return false;
     }
 
     public getTeamLabel(team: number) {

@@ -38,4 +38,8 @@ export class NewGamePage implements OnInit {
     this.location.back();
   }
 
+  onSetChange(event: any) {
+    this.definitionSet = event.detail.value; 
+  }
+
 }

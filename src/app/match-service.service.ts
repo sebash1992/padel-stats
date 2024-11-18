@@ -24,15 +24,21 @@ export class MatchServiceService {
     this.saveInLocalStorage();
   }
 
+  public isServing(team:number){
+    return this.game.isServing(team);
+  }
+  public setService(team:number){
+    this.game.setService(team);
+  }
   public addHistory() {
-    debugger;
+    ;
     const copy = structuredClone(this.game)
     this.history.push(copy);
   }
 
   public rollBackPoint() {
     if (this.history.length > 0) {
-      debugger;
+      ;
       var previousPoint = this.history.pop();
       console.log('Previo');
       console.log(JSON.stringify(this.game));

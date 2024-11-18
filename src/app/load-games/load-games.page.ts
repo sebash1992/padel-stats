@@ -20,20 +20,20 @@ export class LoadGamesPage implements OnInit {
   constructor(private router: Router,private storageService: LocalStorageService,public matchService:MatchServiceService, private location: Location) { }
 
   ngOnInit() {
-    debugger;
+    ;
     this.matches = this.storageService.getItems("matches");
-    debugger;
+    ;
   }
   getKeys(dictionary: { [key: string]: MatchStats }): string[] {
     return Object.keys(dictionary);
   }
 
   loadGame(key){
-    debugger;
+    ;
     let match = this.matches[key];
     // let matchs = plainToInstance(MatchStats, match);
     let matchs = new MatchStats(true,match);
-debugger;
+;
     this.matchService.game = matchs;
     let s = matchs.team1.getTeamLabel(1);
     this.router.navigate(['/match-stats']);
