@@ -1,5 +1,6 @@
 import { Team } from './team'
 import { v4 as uuidv4 } from 'uuid';
+import { Translations } from './translations';
 
 export class MatchStats {
     id: string;
@@ -12,12 +13,12 @@ export class MatchStats {
     thirdSetType: number = 3;
 
 
-    public constructor(hasPar: boolean, jsonData?: MatchStats) {
+    public constructor(translations: Translations,hasPar: boolean, jsonData?: MatchStats) {
         this.id = uuidv4();
         this.date = new Date();
         if (!hasPar) {
-            this.team1 = new Team(true);
-            this.team2 = new Team(false);
+            this.team1 = new Team(translations,true);
+            this.team2 = new Team(translations,false);
             this.currentSet = 1
             this.setWinner = [-1, -1, -1, -1]
         }else{
@@ -26,8 +27,8 @@ export class MatchStats {
             this.currentSet = jsonData.currentSet;
             this.setWinner = jsonData.setWinner;
             this.thirdSetType = jsonData.thirdSetType;
-            this.team2 = new Team(false, jsonData.team2);
-            this.team1 = new Team(false, jsonData.team1);
+            this.team2 = new Team(translations,false, jsonData.team2);
+            this.team1 = new Team(translations,false, jsonData.team1);
         }
     }
 

@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package padel.stats;
 
 import com.getcapacitor.BridgeActivity;
 

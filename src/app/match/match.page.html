@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start" (click)='goBack()'>
-      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> {{"VOLVER" | translate}}
     </ion-buttons>
-    <ion-title>Partido</ion-title>
+    <ion-title>{{"PARTIDO" | translate}}</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)='goToStats()'>
         <ion-icon slot="icon-only" name="stats-chart-outline"></ion-icon>
@@ -15,8 +15,11 @@
 <ion-content [fullscreen]="true">
   <ion-grid [fixed]="true" class="border-bottom-2px">
     <ion-row>
-      <ion-col class="align-center">{{matchService.game.team1.drive.name}}</ion-col>
-      <ion-col class="align-center">{{matchService.game.team1.reves.name}}</ion-col>
+      <ion-col class="align-center">{{matchService.game.getTeamLabel(1)| uppercase}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="align-center">{{matchService.game.team1.drive.name | uppercase}}</ion-col>
+      <ion-col class="align-center">{{matchService.game.team1.reves.name | uppercase}}</ion-col>
     </ion-row>
   </ion-grid>
   <ion-grid [fixed]="true" class="border-bottom-2px">
@@ -43,8 +46,11 @@
   </ion-grid>
   <ion-grid [fixed]="true" class="border-top-2px">
     <ion-row>
-      <ion-col class="align-center">{{matchService.game.team2.reves.name}}</ion-col>
-      <ion-col class="align-center">{{matchService.game.team2.drive.name}}</ion-col>
+      <ion-col class="align-center">{{matchService.game.team2.reves.name | uppercase}}</ion-col>
+      <ion-col class="align-center">{{matchService.game.team2.drive.name | uppercase}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="align-center">{{matchService.game.getTeamLabel(2) | uppercase}}</ion-col>
     </ion-row>
   </ion-grid>
 
@@ -56,7 +62,8 @@
           <ion-row>
             <ion-col size="1"></ion-col>
             <ion-col class="align-left" [ngClass]="{'is-serving': matchService.isServing(1)}"
-              (click)="matchService.setService(1)">{{matchService.game.getTeamLabel(1)}}</ion-col>
+              (click)="matchService.setService(1)">{{matchService.game.getTeamLabel(1) | uppercase}}
+              <ion-icon *ngIf="matchService.isServing(1)" name="tennisball-outline" class="tennis-ball"></ion-icon></ion-col>
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-col size="1">
@@ -105,7 +112,8 @@
           <ion-row>
             <ion-col size="1"></ion-col>
             <ion-col class="align-left" [ngClass]="{'is-serving': matchService.isServing(2)}"
-              (click)="matchService.setService(2)">{{matchService.game.getTeamLabel(2)}}</ion-col>
+              (click)="matchService.setService(2)">{{matchService.game.getTeamLabel(2) | uppercase}} 
+              <ion-icon *ngIf="matchService.isServing(2)" name="tennisball-outline" class="tennis-ball"></ion-icon></ion-col>
           </ion-row>
         </ion-grid>
       </ion-col>

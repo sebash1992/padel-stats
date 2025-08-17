@@ -2,20 +2,22 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CounterComponent } from '../counter/counter.component'
 import { IonicModule } from '@ionic/angular';
 import { MatchServiceService } from '../match-service.service'
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-player-stats',
   templateUrl: './player-stats.component.html',
   styleUrls: ['./player-stats.component.scss'],
   standalone: true,
-  imports: [IonicModule, CounterComponent]
+  imports: [IonicModule, CounterComponent,TranslateModule]
 })
 export class PlayerStatsComponent implements OnInit {
   @Input() team: string;
   @Input() player: string;
   unforcedErrors: number = 0;
   winners: number = 0;
-  constructor(public matchService: MatchServiceService) { }
+  constructor(public matchService: MatchServiceService,private translate:TranslateService) { }
 
   ngOnInit() { }
 
@@ -33,13 +35,13 @@ export class PlayerStatsComponent implements OnInit {
     switch (this.team) {
       case ("team1"):
         switch (this.player) {
-          case ("drive"):
+            case this.translate.instant('DRIVE').toLowerCase():
             this.matchService.game.team1.drive.addWinner(this.matchService.game.currentSet);
             if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team1.drive.addWinnerIn40(this.matchService.game.currentSet);
             }
             break;
-          case ("reves"):
+            case this.translate.instant('REVES').toLowerCase():
             this.matchService.game.team1.reves.addWinner(this.matchService.game.currentSet);
             if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team1.reves.addWinnerIn40(this.matchService.game.currentSet);
@@ -49,13 +51,13 @@ export class PlayerStatsComponent implements OnInit {
         break;
       case ("team2"):
         switch (this.player) {
-          case ("drive"):
+          case this.translate.instant('DRIVE').toLowerCase():
             this.matchService.game.team2.drive.addWinner(this.matchService.game.currentSet);
             if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team2.drive.addWinnerIn40(this.matchService.game.currentSet);
             }
             break;
-          case ("reves"):
+            case this.translate.instant('REVES').toLowerCase():
             this.matchService.game.team2.reves.addWinner(this.matchService.game.currentSet);
             if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team2.reves.addWinnerIn40(this.matchService.game.currentSet);
@@ -72,13 +74,13 @@ export class PlayerStatsComponent implements OnInit {
     switch (this.team) {
       case ("team1"):
         switch (this.player) {
-          case ("drive"):
+          case this.translate.instant('DRIVE').toLowerCase():
             this.matchService.game.team1.drive.addUnforcedError(this.matchService.game.currentSet);
             if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team1.drive.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
             break;
-          case ("reves"):
+            case this.translate.instant('REVES').toLowerCase():
             this.matchService.game.team1.reves.addUnforcedError(this.matchService.game.currentSet);
             if(this.matchService.game.team2.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team1.reves.addUnforcedErrorIn40(this.matchService.game.currentSet);
@@ -88,13 +90,13 @@ export class PlayerStatsComponent implements OnInit {
         break;
       case ("team2"):
         switch (this.player) {
-          case ("drive"):
+          case this.translate.instant('DRIVE').toLowerCase():
             this.matchService.game.team2.drive.addUnforcedError(this.matchService.game.currentSet);
             if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team2.drive.addUnforcedErrorIn40(this.matchService.game.currentSet);
             }
             break;
-          case ("reves"):
+            case this.translate.instant('REVES').toLowerCase():
             this.matchService.game.team2.reves.addUnforcedError(this.matchService.game.currentSet);
             if(this.matchService.game.team1.scoreCurrentGame(this.matchService.game.currentSet) == 40){
               this.matchService.game.team2.reves.addUnforcedErrorIn40(this.matchService.game.currentSet);

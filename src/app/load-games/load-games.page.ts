@@ -6,36 +6,35 @@ import { LocalStorageService } from '../local-storage.service';
 import { MatchStats } from '../models/matchStats';
 import { MatchServiceService } from '../match-service.service';
 import { Router } from '@angular/router';
+import { TranslateService,TranslateModule } from '@ngx-translate/core';
+import { Translations } from '../models/translations';
 
 @Component({
   selector: 'app-load-games',
   templateUrl: './load-games.page.html',
   styleUrls: ['./load-games.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule,TranslateModule]
 })
 export class LoadGamesPage implements OnInit {
 
+  private translations: Translations;
   public matches: { [key: string]: MatchStats };
-  constructor(private router: Router,private storageService: LocalStorageService,public matchService:MatchServiceService, private location: Location) { }
+  constructor(private router: Router,private storageService: LocalStorageService,public matchService:MatchServiceService, private location: Location,private translate: TranslateService) { }
 
   ngOnInit() {
-    ;
-    this.matches = this.storageService.getItems("matches");
-    ;
+    debugger;
+    this.matches = this.storageService.getItems("matches"); 
+    this.translations = new Translations(this.translate.instant('PAREJA 1'),this.translate.instant('PAREJA 2'),this.translate.instant('DRIVE'),this.translate.instant('REVES'),this.translate.instant('PAREJA'));
   }
   getKeys(dictionary: { [key: string]: MatchStats }): string[] {
     return Object.keys(dictionary);
   }
 
   loadGame(key){
-    ;
     let match = this.matches[key];
-    // let matchs = plainToInstance(MatchStats, match);
-    let matchs = new MatchStats(true,match);
-;
+    let matchs = new MatchStats(this.translations,true,match);
     this.matchService.game = matchs;
-    let s = matchs.team1.getTeamLabel(1);
     this.router.navigate(['/match-stats']);
   }
   goBack() {

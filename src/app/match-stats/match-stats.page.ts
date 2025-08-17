@@ -7,13 +7,14 @@ import { Router } from '@angular/router';
 import { MatchStats } from '../models/matchStats'
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatchServiceService } from '../match-service.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-match-stats',
   templateUrl: './match-stats.page.html',
   styleUrls: ['./match-stats.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, NgxDatatableModule]
+  imports: [IonicModule, CommonModule, FormsModule, NgxDatatableModule,TranslateModule]
 })
 
 export class MatchStatsPage implements OnInit {

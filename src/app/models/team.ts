@@ -1,6 +1,8 @@
 
 import { Player } from './player'
 import { Type } from 'class-transformer';
+import { TranslateService } from '@ngx-translate/core';
+import { Translations } from './translations';
 
 export class TeamSet {
 
@@ -16,9 +18,8 @@ export class TeamSet {
     pointsWinned: number;
     maxConsecutiveWins: number;
 
-    public constructor(isSuper: boolean, serving: boolean, teamSet?: TeamSet) {
+    public constructor(private translations: Translations, isSuper: boolean, serving: boolean, teamSet?: TeamSet) {
         if (teamSet != undefined) {
-
             this.breakOptions = teamSet.breakOptions;
             this.breaksAcchived = teamSet.breaksAcchived;
             this.goldenPoints = teamSet.goldenPoints;
@@ -183,7 +184,7 @@ export class Team {
     points: number;
     startServingTieBreak: boolean;
 
-    public constructor(isServing: boolean = false, team?: Team) {
+    public constructor(private translations: Translations,isServing: boolean = false, team?: Team) {
         if (team != undefined) {
             this.maxConsecutiveWins = team.maxConsecutiveWins;
             this.consecutiveWins = team.consecutiveWins;
@@ -191,12 +192,12 @@ export class Team {
             this.isServing = team.isServing;
             this.points = team.points;
             this.startServingTieBreak = team.startServingTieBreak;
-            this.drive = new Player("Drive", team.drive);
-            this.reves = new Player("Reves",team.reves);
-            this.set1 = new TeamSet(false, false,team.set1);
-            this.set2 = new TeamSet(false, false,team.set2);
-            this.set3 = new TeamSet(false, false,team.set2);
-            this.super = new TeamSet(true, false,team.super);
+            this.drive = new Player(translations.drive.toLowerCase(), team.drive);
+            this.reves = new Player(translations.reves.toLowerCase(),team.reves);
+            this.set1 = new TeamSet(translations,false, false,team.set1);
+            this.set2 = new TeamSet(translations,false, false,team.set2);
+            this.set3 = new TeamSet(translations,false, false,team.set2);
+            this.super = new TeamSet(translations,true, false,team.super);
         } else {
             this.maxConsecutiveWins = 0;
             this.consecutiveWins = 0;
@@ -204,12 +205,12 @@ export class Team {
             this.isServing = isServing;
             this.points = 0;
             this.startServingTieBreak = false;
-            this.drive = new Player("Drive");
-            this.reves = new Player("Reves");
-            this.set1 = new TeamSet(false, false);
-            this.set2 = new TeamSet(false, false);
-            this.set3 = new TeamSet(false, false);
-            this.super = new TeamSet(true, false);
+            this.drive = new Player(translations.drive.toLowerCase());
+            this.reves = new Player(translations.reves.toLowerCase());
+            this.set1 = new TeamSet(translations,false, false);
+            this.set2 = new TeamSet(translations,false, false);
+            this.set3 = new TeamSet(translations,false, false);
+            this.super = new TeamSet(translations,true, false);
         }
     }
 
@@ -238,9 +239,9 @@ export class Team {
 
     public getWinners(set: number, player: string) {
         switch (player) {
-            case "drive":
+            case this.translations.drive.toLowerCase():
                 return this.drive.getWinners(set);
-            case "reves":
+            case this.translations.reves.toLowerCase():
                 return this.reves.getWinners(set);
             default:
                 return this.drive.getWinners(set) + this.reves.getWinners(set);
@@ -250,9 +251,9 @@ export class Team {
 
     public getUnforceErrors(set: number, player: string) {
         switch (player) {
-            case "drive":
+            case this.translations.drive.toLowerCase():
                 return this.drive.getUnforcedErrors(set);
-            case "reves":
+            case this.translations.reves.toLowerCase():
                 return this.reves.getUnforcedErrors(set);
             default:
                 return this.drive.getUnforcedErrors(set) + this.reves.getUnforcedErrors(set);
@@ -262,9 +263,9 @@ export class Team {
 
     public getUnforceErrorsIn40(set: number, player: string) {
         switch (player) {
-            case "drive":
+            case this.translations.drive.toLowerCase():
                 return this.drive.getUnforcedErrorsIn40(set);
-            case "reves":
+            case this.translations.reves.toLowerCase():
                 return this.reves.getUnforcedErrorsIn40(set);
             default:
                 return this.drive.getUnforcedErrorsIn40(set) + this.reves.getUnforcedErrorsIn40(set);
@@ -272,9 +273,9 @@ export class Team {
     }
     public getWinnersIn40(set: number, player: string) {
         switch (player) {
-            case "drive":
+            case this.translations.drive.toLowerCase():
                 return this.drive.getWinnersIn40(set);
-            case "reves":
+                case this.translations.reves.toLowerCase():
                 return this.reves.getWinnersIn40(set);
             default:
                 return this.drive.getWinnersIn40(set) + this.reves.getWinnersIn40(set);
@@ -413,11 +414,21 @@ export class Team {
         return 0;
     }
 
-    public getTeamLabel(number: number) {
-        if (this.drive.name.toLowerCase() !== 'drive' || this.reves.name.toLowerCase() !== 'reves') {
-            return this.drive.name + "-" + this.reves.name
+    // public getTeamLabel(number: number) {
+    //     if (this.drive.name.toLowerCase() !== 'drive' || this.reves.name.toLowerCase() !== 'reves') {
+    //         return this.drive.name + "-" + this.reves.name
+    //     } else {
+    //         return "Pareja " + number;
+    //     }
+    // }
+    public getTeamLabel(number: number): string {
+        if (
+          this.drive.name.toLowerCase() !== this.translations.drive.toLowerCase() ||
+          this.reves.name.toLowerCase() !== this.translations.reves.toLowerCase()
+        ) {
+          return `${this.drive.name}-${this.reves.name}`;
         } else {
-            return "Pareja " + number;
+          return `${this.translations.team} ${number}`;
         }
-    }
+      }
 }

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start" (click)='goBack()'>
-      <ion-icon name="chevron-back-outline" size="large"></ion-icon> Volver
+      <ion-icon name="chevron-back-outline" size="large"></ion-icon> {{"VOLVER" | translate}}
     </ion-buttons>
     <ion-title>Partidos</ion-title>
   </ion-toolbar>
@@ -13,10 +13,25 @@
     </ion-item>
   </ion-list> -->
   <ion-grid>
-    <ion-row *ngFor="let key of getKeys(matches)">
-      <ion-col size="12">
-        <ion-button expand="block" class="menu-button" (click)="loadGame(key)">{{ matches[key].team1.drive.name.toLowerCase()}} {{matches[key].team1.reves.name.toLowerCase()}} vs {{ matches[key].team2.drive.name.toLowerCase()}} {{matches[key].team2.reves.name.toLowerCase()}} {{matches[key].date | date:'yyyy-MM-dd'}}  </ion-button>
-      </ion-col>
-    </ion-row>
+    <ng-container *ngIf="matches && getKeys(matches).length > 0; else noMatches">
+      <ion-row *ngFor="let key of getKeys(matches)">
+        <ion-col size="12">
+          <ion-button expand="block" class="menu-button" (click)="loadGame(key)">
+            {{ matches[key].team1.drive.name.toLowerCase() }} {{ matches[key].team1.reves.name.toLowerCase() }} 
+            vs 
+            {{ matches[key].team2.drive.name.toLowerCase() }} {{ matches[key].team2.reves.name.toLowerCase() }} 
+            {{ matches[key].date | date:'yyyy-MM-dd' }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    
+    <ng-template #noMatches>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <p>{{ "NO HAY PARTIDOS" | translate }}</p>
+        </ion-col>
+      </ion-row>
+    </ng-template>
   </ion-grid>
 </ion-content>
